@@ -93,7 +93,6 @@ END //
 
 DELIMITER ;
 
-DELIMITER //
 
 DELIMITER // 
 
