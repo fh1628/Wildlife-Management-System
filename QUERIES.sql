@@ -19,3 +19,19 @@ DELIMITER ;
 
 CALL get_species_in_location('Tokyo');
 
+
+
+-- Query 3:
+DELIMITER //
+CREATE PROCEDURE get_population_of_species(IN species_name VARCHAR(255))
+BEGIN
+	SELECT Population.PopulationID as 'Population ID', Population.Size as 'Size'
+    FROM Population
+    WHERE Population.SpeciesScientificName = species_name;
+END //
+DELIMITER ;
+
+CALL get_population_of_species('Panthera tigris');
+
+
+
