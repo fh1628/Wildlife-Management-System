@@ -4,7 +4,7 @@
 
 DELIMITER //
 
-CREATE PROCEDURE GET_SPECIES_IN_LOCATION(IN location_name VARCHAR(255))
+CREATE PROCEDURE get_species_in_location(IN location_name VARCHAR(255))
 BEGIN
 	SELECT Species.ScientificName as 'Scientific Name', Species.CommonName as 'Common Name'
     FROM Species
@@ -17,5 +17,5 @@ END //
 
 DELIMITER ;
 
-CALL GET_SPECIES_IN_LOCATION('Tokyo');
+CALL get_species_in_location('Tokyo');
 
