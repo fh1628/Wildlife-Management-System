@@ -1,22 +1,16 @@
 -- Location
-INSERT INTO Location (Latitude, Longitude, LocationName, LocationType, Area, Climate, Elevation)
+INSERT INTO Location (Latitude, Longitude, LocationName, LocationType, Country, Area, Climate, Elevation)
 VALUES
-    (40.7128, -74.0060, 'New York City', 'City', 468.9, 'Humid Subtropical', 10),
-    (51.5074, -0.1278, 'London', 'City', 1572, 'Temperate Maritime', 35),
-    (35.6895, 139.6917, 'Tokyo', 'City', 2187, 'Humid Subtropical', 131),
-    (19.4326, -99.1332, 'Mexico City', 'City', 1485, 'Humid Subtropical', 2240),
-    (48.8566, 2.3522, 'Paris', 'City', 105.4, 'Temperate Oceanic', 35),
-    (37.7749, -122.4194, 'San Francisco', 'City', 600.6, 'Mediterranean', 52);
-
--- Location Country
-INSERT INTO LCountry (Latitude, Longitude, Country)
-VALUES
-    (40.7128, -74.0060, 'United States'),
-    (51.5074, -0.1278, 'United Kingdom'),
-    (35.6895, 139.6917, 'Japan'),
-    (19.4326, -99.1332, 'Mexico'),
-    (48.8566, 2.3522, 'France'),
-    (37.7749, -122.4194, 'United States');
+    (40.7128, -74.0060, 'New York City', 'City', 'United States', 468.9, 'Humid Subtropical', 10),
+    (51.5074, -0.1278, 'London', 'City', 'United Kingdom', 1572, 'Temperate Maritime', 35),
+    (35.6895, 139.6917, 'Tokyo', 'City', 'Japan', 2187, 'Humid Subtropical', 131),
+    (19.4326, -99.1332, 'Mexico City', 'City', 'Mexico', 1485, 'Humid Subtropical', 2240),
+    (48.8566, 2.3522, 'Paris', 'City', 'France', 105.4, 'Temperate Oceanic', 35),
+    (37.7749, -122.4194, 'San Francisco', 'City', 'United States', 600.6, 'Mediterranean', 52),
+    (-2.3326, 34.8255, 'Serengeti Plains', 'Savanna', 'Tanzania', 30000, 'Tropical', 1162),
+    (-3.4653, -62.2159, 'Amazon Rainforest', 'Rainforest', 'Brazil', 706.7, 'Tropical', 200),
+	(23.4162, 15.5377, 'Sahara Desert', 'Desert', 'Multiple', 9065000, 'Hot desert', 500);
+    
 
 
 -- Habitat
@@ -27,7 +21,11 @@ VALUES
     ('Ueno Park', 'Urban Park', 'Endangered', 'High', 35.6895, 139.6917),
     ('Bosque de Chapultepec', 'Urban Park', 'Stable', 'Low', 19.4326, -99.1332),
     ('Jardin des Tuileries', 'Urban Park', 'Declining', 'Moderate', 48.8566, 2.3522),
-    ('Golden Gate Park', 'Urban Park', 'Endangered', 'High', 37.7749, -122.4194);
+    ('Golden Gate Park', 'Urban Park', 'Endangered', 'High', 37.7749, -122.4194),
+    ('Serengeti Plains', 'Savanna', 'Stable', 'Low', -2.3326, 34.8255),
+	('Amazon Rainforest', 'Tropical Rainforest', 'Declining', 'High', -3.4653, -62.2159),
+	('Sahara Desert', 'Desert', 'Stable', 'Low', 23.4162, 15.5377);
+    
 
 -- Habitat Threats
 INSERT INTO HThreats (HabitatName, Threat)
