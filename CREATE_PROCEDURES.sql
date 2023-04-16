@@ -12,18 +12,11 @@ BEGIN
 	  Longitude FLOAT NOT NULL,
 	  LocationName VARCHAR(255),
 	  LocationType VARCHAR(50),
+      Country VARCHAR(50),
 	  Area FLOAT,
 	  Climate VARCHAR(50),
 	  Elevation FLOAT,
 	  PRIMARY KEY (Latitude, Longitude)
-	);
-
-	CREATE TABLE LCountry (
-	  Latitude FLOAT NOT NULL,
-	  Longitude FLOAT NOT NULL,
-	  Country VARCHAR(50),
-	  FOREIGN KEY (Latitude, Longitude) REFERENCES Location (Latitude, Longitude) ON DELETE CASCADE,
-	  PRIMARY KEY(Latitude, Longitude, Country)
 	);
 END //
 
@@ -148,5 +141,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
-
