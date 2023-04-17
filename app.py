@@ -22,3 +22,24 @@ class Location(db.Model):
     Climate = db.Column(db.String(50))
     Elevation = db.Column(db.Float)
 
+# Define the Habitat model class
+class Habitat(db.Model):
+    __tablename__ = 'Habitat'
+    HabitatName = db.Column(db.String(255), primary_key=True)
+    HabitatType = db.Column(db.String(50))
+    ConservationStatus = db.Column(db.String(50))
+    DegradationLevel = db.Column(db.String(50))
+    Latitude = db.Column(db.Float, db.ForeignKey('Location.Latitude'), nullable=True)
+    Longitude = db.Column(db.Float, db.ForeignKey('Location.Longitude'), nullable=True)
+    Location = db.relationship(Location, backref='habitats')
+
+# Define the HThreats model class
+class HThreats(db.Model):
+    __tablename__ = 'HThreats'
+    HabitatName = db.Column(db.String(255), db.ForeignKey('Habitat.HabitatName'), primary_key=True)
+    Threat = db.Column(db.String(255), primary_key=True)
+
+
+with app.app_context():
+    # Create the database tables (if they don't exist)
+    db.create_all()
