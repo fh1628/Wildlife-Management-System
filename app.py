@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 app = Flask(__name__)
 
@@ -113,6 +114,28 @@ class CompanyResearcher(db.Model):
     JobTitle = db.Column(db.String(255))
     Email = db.Column(db.String(255), db.ForeignKey('Researcher.Email', ondelete='CASCADE'), primary_key=True)
 
+
+class HabitatLocationDetails(db.Model):
+    __tablename__ = 'HABITAT_LOCATION_DETAILS'
+    HabitatName = db.Column(db.String(50), primary_key=True)
+    LocationName = db.Column(db.String(50))
+
+class PopulationHabitatDetails(db.Model):
+    __tablename__ = 'POPULATION_HABITAT_DETAILS'
+    SpeciesScientificName = db.Column(db.String(50), primary_key=True)
+    HabitatName = db.Column(db.String(50))
+    Longitude = db.Column(db.Float)
+    Latitude = db.Column(db.Float)
+
+class PopulationSpeciesDetails(db.Model):
+    __tablename__ = 'POPULATION_SPECIES_DETAILS'
+    SpeciesScientificName = db.Column(db.String(50), primary_key=True)
+    CommonName = db.Column(db.String(50))
+    Family = db.Column(db.String(50))
+    Genus = db.Column(db.String(50))
+    ConservationStatus = db.Column(db.String(50))
+
 with app.app_context():
     # Create the database tables (if they don't exist)
     db.create_all()
+
