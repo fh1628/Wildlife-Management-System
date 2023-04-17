@@ -42,7 +42,7 @@ class HThreats(db.Model):
 # Define the Species model class
 class Species(db.Model):
     __tablename__ = 'Species'
-    ScientificName = db.Column(db.String(255), primary_key=True)
+    ScientificName = db.Column(db.String(255), primary_key=True, index=True)
     CommonName = db.Column(db.String(255))
     ConservationStatus = db.Column(db.String(50))
     GeographicDistribution = db.Column(db.String(255))
@@ -63,7 +63,7 @@ class Population(db.Model):
     Trend = db.Column(db.String(50))
     GrowthRate = db.Column(db.DECIMAL(5, 2))
     Density = db.Column(db.DECIMAL(10, 2))
-    HabitatName = db.Column(db.String(255), db.ForeignKey('Habitat.HabitatName', ondelete='CASCADE'))
+    HabitatName = db.Column(db.String(255), db.ForeignKey('Habitat.HabitatName', ondelete='CASCADE'), index=True)
     SpeciesScientificName = db.Column(db.String(255), db.ForeignKey('Species.ScientificName', ondelete='CASCADE'))
 
 
@@ -74,7 +74,7 @@ class Researcher(db.Model):
     Email = db.Column(db.String(255), primary_key=True)
     Phone = db.Column(db.String(255))
     Expertise = db.Column(db.String(255))
-    SpeciesScientificName = db.Column(db.String(255))
+    SpeciesScientificName = db.Column(db.String(255), index=True)
     PopulationID = db.Column(db.Integer, db.ForeignKey('Population.PopulationID', ondelete='SET NULL'))
 
 # Define the Assistant Researcher model class. It's a weak entity of Researcher
