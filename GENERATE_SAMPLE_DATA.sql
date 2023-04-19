@@ -31,8 +31,10 @@ VALUES
 INSERT INTO HThreats (HabitatName, Threat)
 VALUES 
     ('Central Park', 'Overuse'),
+    ('Central Park', 'Pollusion'),
     ('Hyde Park', 'Pollution'),
     ('Ueno Park', 'Climate Change'),
+    ('Ueno Park', 'Overuse'),
     ('Bosque de Chapultepec', 'Invasive Species'),
     ('Jardin des Tuileries', 'Habitat Loss'),
     ('Golden Gate Park', 'Overuse');
@@ -54,16 +56,20 @@ VALUES
 -- Species Threats
 INSERT INTO SThreats (ScientificName, Threat)
 VALUES 
-    ('Panthera tigris', 'Habitat loss and fragmentation'),
-    ('Ailuropoda melanoleuca', 'Habitat loss and fragmentation'),
-    ('Gorilla beringei', 'Habitat loss and degradation'),
-    ('Pongo pygmaeus', 'Habitat loss and fragmentation'),
-    ('Elephas maximus', 'Habitat loss and fragmentation'),
-    ('Tursiops truncatus', 'Habitat loss and degradation'),
-    ('Canis lupus', 'Habitat loss and fragmentation'),
-    ('Phoenicopterus roseus', 'Habitat loss and degradation'),
-    ('Felis catus', 'Predation and competition'),
-    ('Homo sapiens', 'Habitat loss, fragmentation and degradation');
+    ('Panthera tigris', 'Habitat loss'),
+    ('Panthera tigris', 'Fragmentation'),
+    ('Ailuropoda melanoleuca', 'Habitat loss'),
+    ('Gorilla beringei', 'Habitat loss'),
+    ('Gorilla beringei', 'Degradation'),
+    ('Pongo pygmaeus', 'Habitat loss'),
+    ('Elephas maximus', 'Fragmentation'),
+    ('Tursiops truncatus', 'Habitat loss'),
+    ('Tursiops truncatus', 'Degradation'),
+    ('Canis lupus', 'Habitat loss'),
+    ('Phoenicopterus roseus', 'Habitat'),
+    ('Felis catus', 'Predation'),
+    ('Felis catus', 'Competition'),
+    ('Homo sapiens', 'Degradation');
 
 
 
