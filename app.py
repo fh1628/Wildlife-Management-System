@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+from sqlalchemy import text, bindparam
+import json 
 
 app = Flask(__name__)
 
@@ -31,7 +32,6 @@ class Habitat(db.Model):
     DegradationLevel = db.Column(db.String(50))
     Latitude = db.Column(db.Float, db.ForeignKey('Location.Latitude'), nullable=True)
     Longitude = db.Column(db.Float, db.ForeignKey('Location.Longitude'), nullable=True)
-    Location = db.relationship(Location, backref='habitats')
 
 # Define the Habitat Threats model class
 class HThreats(db.Model):
@@ -134,6 +134,24 @@ class PopulationSpeciesDetails(db.Model):
     Family = db.Column(db.String(50))
     Genus = db.Column(db.String(50))
     ConservationStatus = db.Column(db.String(50))
+
+# Method to add a location entry in the database
+@app.route('/add_location', methods=['POST'])
+def add_location():
+    latitude = request.json["latitude"]
+    longitude = request.json['longitude']
+    name = request.json['location_name']
+    type = request.json['location_type']
+    elevation = request.json['location_elevation']
+    country = request.json['location_country']
+    area = request.json['location_area']
+    climate = request.json['location_climate']
+    if not all([latitude, longitude, name]):
+        return 'Missing data', 400
+    data = Location(Latitude=latitude, Longitude=longitude, LocationName=name, LocationType=type, Country=country, Area=area, Climate=climate, Elevation=elevation)
+    db.session.add(data)
+    db.session.commit()
+    return 'Data added successfully'
 
 with app.app_context():
     # Create the database tables (if they don't exist)
