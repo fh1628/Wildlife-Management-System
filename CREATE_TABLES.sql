@@ -105,3 +105,17 @@ CREATE TABLE CompanyResearcher (
   FOREIGN KEY (Email) REFERENCES Researcher(Email) ON DELETE CASCADE
 );
 
+CREATE TABLE ConservationOrganization (
+  ContactEmail VARCHAR(255) PRIMARY KEY,
+  Name VARCHAR(255),
+  Mission VARCHAR(255),
+  Website VARCHAR(255)
+ );
+ 
+  CREATE TABLE Protects (
+  ContactEmail VARCHAR(255),
+  PopulationID INT,
+  FOREIGN KEY (PopulationID) REFERENCES Population(PopulationID) ON DELETE CASCADE,
+  FOREIGN KEY (ContactEmail) REFERENCES ConservationOrganization(ContactEmail) ON DELETE CASCADE,
+  PRIMARY KEY (ContactEmail, PopulationID)  
+ );
