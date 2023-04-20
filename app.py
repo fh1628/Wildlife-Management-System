@@ -11,8 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost
 # Create a SQLAlchemy object to interact with the database
 db = SQLAlchemy(app)
 
-# Define the Location model class
-
+# Defining model classes
 
 class Location(db.Model):
     __tablename__ = 'Location'
@@ -25,9 +24,6 @@ class Location(db.Model):
     Climate = db.Column(db.String(50))
     Elevation = db.Column(db.Float, index=True)
 
-# Define the Habitat model class
-
-
 class Habitat(db.Model):
     __tablename__ = 'Habitat'
     HabitatName = db.Column(db.String(255), primary_key=True)
@@ -39,9 +35,6 @@ class Habitat(db.Model):
     Longitude = db.Column(db.Float, db.ForeignKey(
         'Location.Longitude'), nullable=True)
 
-# Define the Habitat Threats model class
-
-
 class HThreats(db.Model):
     __tablename__ = 'HThreats'
     HabitatName = db.Column(db.String(255), db.ForeignKey(
@@ -49,7 +42,6 @@ class HThreats(db.Model):
     Threat = db.Column(db.String(255), primary_key=True)
 
 
-# Define the Species model class
 class Species(db.Model):
     __tablename__ = 'Species'
     ScientificName = db.Column(db.String(255), primary_key=True, index=True)
@@ -58,7 +50,6 @@ class Species(db.Model):
     GeographicDistribution = db.Column(db.String(255))
 
 
-# Define the Species Threats model class
 class SThreats(db.Model):
     __tablename__ = 'SThreats'
     ScientificName = db.Column(db.String(255), db.ForeignKey(
@@ -66,7 +57,6 @@ class SThreats(db.Model):
     Threat = db.Column(db.String(255), primary_key=True)
 
 
-# Define the Population model class
 class Population(db.Model):
     __tablename__ = 'Population'
     PopulationID = db.Column(db.Integer, primary_key=True)
@@ -80,7 +70,6 @@ class Population(db.Model):
         'Species.ScientificName', ondelete='CASCADE'))
 
 
-# Define the Researcher model class
 class Researcher(db.Model):
     __tablename__ = 'Researcher'
     Name = db.Column(db.String(255))
@@ -91,9 +80,7 @@ class Researcher(db.Model):
     PopulationID = db.Column(db.Integer, db.ForeignKey(
         'Population.PopulationID', ondelete='SET NULL'))
 
-# Define the Assistant Researcher model class. It's a weak entity of Researcher
-
-
+# Defining the Assistant Researcher model class. It's a weak entity of Researcher
 class AssistantResearcher(db.Model):
     __tablename__ = 'AssistantResearcher'
     Name = db.Column(db.String(255))
@@ -103,26 +90,17 @@ class AssistantResearcher(db.Model):
     researcher = db.relationship('Researcher', backref=db.backref(
         'assistant_researchers', lazy=True))
 
-# Define the Research Projects model class
-
-
 class RProjects(db.Model):
     __tablename__ = 'RProjects'
     Email = db.Column(db.String(255), db.ForeignKey(
         'Researcher.Email', ondelete='CASCADE'), primary_key=True)
     Project = db.Column(db.String(255))
 
-# Define the Research Interests model class
-
-
 class RInterests(db.Model):
     __tablename__ = 'RInterests'
     Email = db.Column(db.String(255), db.ForeignKey(
         'Researcher.Email', ondelete='CASCADE'), primary_key=True)
     ResearchInterests = db.Column(db.String(50))
-
-# Define the University Researcher model class
-
 
 class UniversityResearcher(db.Model):
     __tablename__ = 'UniversityResearcher'
@@ -131,9 +109,6 @@ class UniversityResearcher(db.Model):
     Tenure = db.Column(db.String(255))
     Email = db.Column(db.String(255), db.ForeignKey(
         'Researcher.Email', ondelete='CASCADE'), primary_key=True)
-
-# Define the Company Researcher model class
-
 
 class CompanyResearcher(db.Model):
     __tablename__ = 'CompanyResearcher'
@@ -166,9 +141,8 @@ class PopulationSpeciesDetails(db.Model):
     Genus = db.Column(db.String(50))
     ConservationStatus = db.Column(db.String(50))
 
+
 # Method to add a location entry in the database
-
-
 @app.route('/add_location', methods=['POST'])
 def add_location():
     data = request.json
@@ -218,5 +192,5 @@ def add_habitat():
 
 
 with app.app_context():
-    # Create the database tables (if they don't exist)
+    # Create the database tables
     db.create_all()
