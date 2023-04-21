@@ -59,7 +59,7 @@ class SThreats(db.Model):
 
 class Population(db.Model):
     __tablename__ = 'Population'
-    PopulationID = db.Column(db.Integer, primary_key=True)
+    PopulationID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Size = db.Column(db.Integer)
     Trend = db.Column(db.String(50))
     GrowthRate = db.Column(db.DECIMAL(5, 2))
@@ -209,6 +209,25 @@ def add_species():
     for i in range (len(all_threats)):
         sthreats = SThreats(ScientificName = scientific_name, Threat = all_threats[i])
         db.session.add(sthreats)
+    db.session.commit()
+    return 'Data added'
+
+
+
+@app.route('/add_population', methods=['POST'])
+def add_population():
+    data = request.json
+
+    size = data.get('population_size', None)
+    trend = data.get('population_trend', None)
+    growth_rate = data.get('growth_rate', None)
+    density = data.get('density', None)
+    habitat_name = data.get('habitat_name')
+    specifies_scientific_name = data.get('species_scientific_name')
+
+    population = Population(Size = size, Trend = trend, GrowthRate = growth_rate, Density = density, 
+                            HabitatName = habitat_name, SpeciesScientificName = specifies_scientific_name)
+    db.session.add(population)
     db.session.commit()
     return 'Data added'
 
