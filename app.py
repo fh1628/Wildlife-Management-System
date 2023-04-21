@@ -6,8 +6,8 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/execute_sql_file')
-def execute_sql_file():
+@app.route('/create_tables')
+def create_tables():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -31,7 +31,62 @@ def execute_sql_file():
     cursor.close()
     conn.close()
 
-    return 'SQL script executed successfully'
+    return 'Tables created successfully'
+
+@app.route('/create_views')
+def create_views():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    with open('VIEWS.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+
+    sql_statements = sql_script.split(';')
+
+    for statement in sql_statements:
+        if statement.strip() != '':
+            cursor.execute(statement)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Views created successfully'
+
+@app.route('/create_indices')
+def create_indices():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    with open('INDICES.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+
+    sql_statements = sql_script.split(';')
+
+    for statement in sql_statements:
+        if statement.strip() != '':
+            cursor.execute(statement)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Indices created successfully'
+
 
 @app.route('/add_location', methods=['POST'])
 def add_location():
