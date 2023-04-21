@@ -63,7 +63,7 @@ def add_location():
 
     cursor.close()
     conn.close()
-    return 'data added'
+    return 'Data added'
 
 @app.route('/add_habitat', methods=['POST'])
 def add_habitat():
@@ -99,5 +99,72 @@ def add_habitat():
 
     cursor.close()
     conn.close()
-    return 'data added'
+    return 'Data added'
+
+
+@app.route('/add_species', methods=['POST'])
+def add_species():
+    data = request.json
+
+    scientific_name = data.get('scientific_name')
+    common_name = data.get('common_name', None)
+    conservation_status = data.get('conservation_status', None)
+    geographic_distribution = data.get('geographic_distribution', None)
+    threats = data.get('threats')
+    all_threats = threats.split(", ")
+    
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+
+
+    query = "INSERT INTO Species (ScientificName, CommonName, ConservationStatus, GeographicDistribution) VALUES (%s, %s, %s, %s)"
+    values = (scientific_name, common_name, conservation_status, geographic_distribution)
+    cursor.execute(query, values)
+
+
+    for i in range(len(all_threats)):
+        query = "INSERT INTO SThreats (ScientificName, Threat) VALUES ('{}', '{}')".format(scientific_name, all_threats[i])
+        cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Data added'
+
+
+@app.route('/add_population', methods=['POST'])
+def add_population():
+    data = request.json
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    population_id = data.get('population_id')
+    size = data.get('population_size', None)
+    trend = data.get('population_trend', None)
+    growth_rate = data.get('growth_rate', None)
+    density = data.get('density', None)
+    habitat_name = data.get('habitat_name')
+    specifies_scientific_name = data.get('species_scientific_name')
+
+    query = "INSERT INTO Population (PopulationID, Size, Trend, GrowthRate, Density, HabitatName, SpeciesScientificName) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    values = (population_id, size, trend, growth_rate, density, habitat_name, specifies_scientific_name)
+    cursor.execute(query, values)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Data added'
+
 
