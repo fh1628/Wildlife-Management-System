@@ -94,6 +94,35 @@ def create_prerequisites():
     create_indices()
     return "Tables, views, and indices created successfully"
 
+
+@app.route('/generate_sample_data')
+def generate_sample_data():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    with open('GENERATE_SAMPLE_DATA.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+
+    sql_statements = sql_script.split(';')
+
+    for statement in sql_statements:
+        if statement.strip() != '':
+            cursor.execute(statement)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Sample data created successfully'
+
+
 @app.route('/add_location', methods=['POST'])
 def add_location():
     data = request.json
