@@ -190,6 +190,28 @@ def add_habitat():
 
     return 'Data added'
 
+@app.route('/add_species', methods=['POST'])
+def add_species():
+    data = request.json
+
+    scientific_name = data.get('scientific_name')
+    common_name = data.get('common_name', None)
+    conservation_status = data.get('conservation_status', None)
+    geographic_distribution = data.get('geographic_distribution', None)
+    threats = data.get('threats')
+    all_threats = threats.split(", ")
+
+    species = Species(ScientificName = scientific_name, CommonName = common_name, 
+                      ConservationStatus = conservation_status, GeographicDistribution=geographic_distribution)
+    db.session.add(species)
+    db.session.commit()
+
+    for i in range (len(all_threats)):
+        sthreats = SThreats(ScientificName = scientific_name, Threat = all_threats[i])
+        db.session.add(sthreats)
+    db.session.commit()
+    return 'Data added'
+
 
 with app.app_context():
     # Create the database tables
