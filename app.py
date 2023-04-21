@@ -362,3 +362,28 @@ def add_conservation_organization():
     cursor.close()
     conn.close()
     return 'Conservation Organization successfully added'
+
+
+@app.route('/add_assistant_researcher', methods=['POST'])
+def add_assistant_researcher():
+    data = request.json
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    name = data.get('name', None)
+    email = data.get('email')
+    researcher_email = data.get('researcher_email')
+
+    query = "INSERT INTO AssistantResearcher (Name, Email, ResearcherEmail) VALUES (%s, %s, %s)"
+    values = (name, email, researcher_email)
+    cursor.execute(query, values)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Assistant Researcher added'
