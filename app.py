@@ -272,3 +272,57 @@ def add_researcher():
     conn.close()
     return researcher_type + ' Researcher added'
 
+
+@app.route('/add_research_project', methods=['POST'])
+def add_research_project():
+    data = request.json
+
+    email = data.get('email')
+    projects = data.get('projects')
+    all_projects = projects.split(", ")
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    for i in range(len(all_projects)):
+        query = "INSERT INTO RProjects (Email, Project) VALUES (%s, %s)"
+        values = (email, all_projects[i])
+        cursor.execute(query, values)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Research Projects added'
+
+@app.route('/add_research_interest', methods=['POST'])
+def add_research_interest():
+    data = request.json
+
+    email = data.get('email')
+    interests = data.get('research_interest')
+    all_interests = interests.split(", ")
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    for i in range (len(all_interests)):
+        query = "INSERT INTO RInterests (Email, ResearchInterests) VALUES (%s, %s)"
+        values = (email, all_interests[i])
+        cursor.execute(query, values)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Research Interests added'
