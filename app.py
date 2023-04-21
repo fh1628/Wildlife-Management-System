@@ -87,6 +87,12 @@ def create_indices():
 
     return 'Indices created successfully'
 
+@app.route('/create_prerequisites')
+def create_prerequisites():
+    create_tables()
+    create_views()
+    create_indices()
+    return "Tables, views, and indices created successfully"
 
 @app.route('/add_location', methods=['POST'])
 def add_location():
@@ -118,7 +124,7 @@ def add_location():
 
     cursor.close()
     conn.close()
-    return 'Data added'
+    return 'Location added'
 
 @app.route('/add_habitat', methods=['POST'])
 def add_habitat():
@@ -147,14 +153,15 @@ def add_habitat():
     cursor.execute(query, values)
 
     for i in range(len(all_threats)):
-        query = "INSERT INTO HThreats (HabitatName, Threat) VALUES ('{}', '{}')".format(name, all_threats[i])
-        cursor.execute(query)
+        query = "INSERT INTO HThreats (HabitatName, Threat) VALUES(%s, %s)"
+        values = (name, all_threats[i])
+        cursor.execute(query, values)
 
     conn.commit()
 
     cursor.close()
     conn.close()
-    return 'Data added'
+    return 'Habitat added'
 
 
 @app.route('/add_species', methods=['POST'])
@@ -183,15 +190,16 @@ def add_species():
 
 
     for i in range(len(all_threats)):
-        query = "INSERT INTO SThreats (ScientificName, Threat) VALUES ('{}', '{}')".format(scientific_name, all_threats[i])
-        cursor.execute(query)
+        query = "INSERT INTO SThreats (ScientificName, Threat) VALUES (%s, %s)"
+        values = (scientific_name, all_threats[i])
+        cursor.execute(query,values)
 
     conn.commit()
 
     cursor.close()
     conn.close()
 
-    return 'Data added'
+    return 'Species added'
 
 
 @app.route('/add_population', methods=['POST'])
@@ -220,6 +228,47 @@ def add_population():
 
     cursor.close()
     conn.close()
-    return 'Data added'
+    return 'Population added'
 
+@app.route('/add_researcher', methods=['POST'])
+def add_researcher():
+    data = request.json
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    name = data.get('name', None)
+    email = data.get('email')
+    phone = data.get('phone_number', None)
+    expertise = data.get('expertise', None)
+    specifies_scientific_name = data.get('species_scientific_name', None)
+    population_id = data.get('population_id')
+
+    
+    query = "INSERT INTO Researcher (Name, Email, Phone, Expertise, SpeciesScientificName, PopulationID) VALUES (%s, %s, %s, %s, %s, %s)"
+    values = (name, email, phone, expertise, specifies_scientific_name, population_id)
+    cursor.execute(query, values)
+    conn.commit()
+
+    researcher_type = data.get('researcher_type')
+    if researcher_type == 'University':
+        university_name = data.get('university_name', None)
+        tenure= data.get('tenure', None)
+        query = "INSERT INTO UniversityResearcher (Name, UniversityName, Tenure, Email) VALUES (%s, %s, %s, %s)"
+        values = (name, university_name, tenure, email)
+        cursor.execute(query, values)
+    elif researcher_type == 'Company':
+        company_name = data.get('company_name', None)
+        job_title = data.get('job_title', None)
+        query = "INSERT INTO CompanyResearcher (Name, CompanyName, JobTitle, Email) VALUES (%s, %s, %s, %s)"
+        values = (name, company_name, job_title, email)
+        cursor.execute(query, values)
+
+    cursor.close()
+    conn.close()
+    return researcher_type + ' Researcher added'
 
