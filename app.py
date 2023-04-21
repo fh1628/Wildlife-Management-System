@@ -40,7 +40,7 @@ def add_location():
     latitude = request.json["latitude"]
     longitude = request.json['longitude']
     name = data.get('location_name', None)
-    type = data.get('location_type', None)
+    location_type = data.get('location_type', None)
     elevation = data.get('location_elevation', None)
     country = data.get('location_country', None)
     area = data.get('location_area', None)
@@ -56,7 +56,7 @@ def add_location():
     cursor = conn.cursor()
 
     query = "INSERT INTO Location (Latitude, Longitude, LocationName, LocationType, Country, Area, Climate, Elevation) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    values = (latitude, longitude, name, type, country, area, climate, elevation)
+    values = (latitude, longitude, name, location_type, country, area, climate, elevation)
     cursor.execute(query, values)
 
     conn.commit()
@@ -64,3 +64,40 @@ def add_location():
     cursor.close()
     conn.close()
     return 'data added'
+
+@app.route('/add_habitat', methods=['POST'])
+def add_habitat():
+    data = request.json
+
+    name = request.json["habitat_name"]
+    degradation_level = data.get('degradation_level', None)
+    conservation_status = data.get('conservation_status', None)
+    habitat_type = data.get('type', None)
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
+    threats = data.get('threats')
+    all_threats = threats.split(", ")
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "INSERT INTO Habitat (HabitatName, HabitatType, ConservationStatus, DegradationLevel, Latitude, Longitude) VALUES (%s, %s, %s, %s, %s, %s)"
+    values = (name, habitat_type, conservation_status, degradation_level, latitude, longitude)
+    cursor.execute(query, values)
+
+    for i in range(len(all_threats)):
+        query = "INSERT INTO HThreats (HabitatName, Threat) VALUES ('{}', '{}')".format(name, all_threats[i])
+        cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'data added'
+
