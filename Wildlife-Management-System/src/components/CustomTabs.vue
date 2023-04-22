@@ -12,7 +12,7 @@
       <v-card-text>
         <v-window v-model="tab">
           <v-window-item class="d-flex justify-center" value="locations">
-            <LocationTable v-if="tab === 'locations'" style="width: 80%" />
+            <LocationTable v-if="tab === 'locations'" class="table"/>
           </v-window-item>
 
           <v-window-item value="habitats">
@@ -54,4 +54,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.table {
+  margin: 1rem;
+}
 </style>

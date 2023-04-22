@@ -1,13 +1,16 @@
 <template>
   <v-table
     fixed-header
-    height="300px"
+    height="30rem"
+    hover
   >
     <thead>
       <tr>
         <th class="text-left" v-for="(header,key) in headerLabels" :key="key">
           {{header}}
         </th>
+        <th />
+        <th />
       </tr>
     </thead>
     <tbody>
@@ -15,8 +18,9 @@
         v-for="(row,key) in data"
         :key="key"
       >
-        <td>{{ item.name }}</td>
-        <td>{{ item.calories }}</td>
+        <td @click="()=>test(row)" v-for="(column, idx) in row" :key="idx">{{ column ? column : 'NULL' }}</td>
+        <td><v-btn color="blue" variant="tonal" icon="mdi-pencil" size="small" /></td>
+        <td><v-btn color="red" variant="tonal" icon="mdi-delete" size="small" /></td>
       </tr>
     </tbody>
   </v-table>
@@ -37,6 +41,11 @@ export default defineComponent({
         }
     },
     data() {
+    },
+    methods: {
+      test(column) {
+        console.log(column)
+      }
     }
 })
 </script>
