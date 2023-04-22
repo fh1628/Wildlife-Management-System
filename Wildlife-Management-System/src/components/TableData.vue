@@ -3,10 +3,11 @@
     fixed-header
     height="30rem"
     hover
+    id="table"
   >
     <thead>
       <tr>
-        <th class="text-left" v-for="(header,key) in headerLabels" :key="key">
+        <th :class="['text-left','font-weight-bold', {'primary-key': isPrimaryKey(header)} ]" v-for="(header,key) in headerLabels" :key="key">
           {{header}}
         </th>
         <th />
@@ -18,9 +19,16 @@
         v-for="(row,key) in data"
         :key="key"
       >
-        <td @click="()=>test(row)" v-for="(column, idx) in row" :key="idx">{{ column ? column : 'NULL' }}</td>
-        <td><v-btn color="blue" variant="tonal" icon="mdi-pencil" size="small" /></td>
-        <td><v-btn color="red" variant="tonal" icon="mdi-delete" size="small" /></td>
+      
+        <td @click="()=>test(row)" v-for="(column, idx) in row" :key="idx">
+          <v-text-field v-if="selectedRow === key && !isPrimaryKey(idx)" v-model="row[idx]" :label="headerLabels[idx]" variant="underlined" clearable />
+          <p v-else>{{ columnName(column) }}</p>
+          </td>
+        <td>
+          <v-btn v-if="selectedRow === key" color="green" variant="tonal" icon="mdi-check" size="small" @click="selectedRow = null" />
+          <v-btn v-else color="blue" variant="tonal" icon="mdi-pencil" size="small" @click="()=> {selectedRow = key}" :disabled="selectedRow !== null" />
+        </td>
+        <td><v-btn color="red" variant="tonal" icon="mdi-delete" size="small" :disabled="selectedRow !== null && selectedRow !== key" /></td>
       </tr>
     </tbody>
   </v-table>
@@ -35,17 +43,49 @@ export default defineComponent({
             type: Array,
             required: true,
         },
+        primaryKeys: {
+            type: Array,
+            required: false,
+        },
         data: {
             type: Array,
             required: true,
         }
     },
     data() {
+      return {
+        selectedRow: null,
+      }
     },
     methods: {
       test(column) {
         console.log(column)
+      },
+      isPrimaryKey(value) {
+        return this.primaryKeys.includes(value) || this.primaryIndex.includes(value)
+      },
+      columnName(col) {
+        return col ? col:'NULL'
+      },
+      index(val) {
+        return this.primaryKeys.indexOf(val);
+      }
+    },
+    computed: {
+      primaryIndex() {
+        return this.primaryKeys.map((val)=>this.index(val))
       }
     }
 })
 </script>
+
+<style lang="scss" scoped>
+#table {
+  thead {
+    .primary-key {
+      font-weight: 600;
+      color: red;
+    } 
+}
+}
+</style>

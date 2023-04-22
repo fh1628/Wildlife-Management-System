@@ -11,15 +11,12 @@ import CustomTabs from './components/CustomTabs.vue'
         color="#023020"
         class="toolbar"
         >
-          <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
+          <v-icon color="white" icon="mdi-forest" style="margin-left: 2rem; margin-right: 0.5rem;"></v-icon>
 
           <v-toolbar-title class="toolbar-title">Wildlife Management System</v-toolbar-title>
 
-          <v-spacer></v-spacer>
 
-          <v-btn icon color="white">
-            <v-icon>mdi-export</v-icon>
-          </v-btn>
+         
         </v-toolbar>
       </div>
       <div class="container">
@@ -35,6 +32,7 @@ import CustomTabs from './components/CustomTabs.vue'
   .toolbar {
     .toolbar-title {
       color: white;
+      font-weight: 500;
     }
   }
 }

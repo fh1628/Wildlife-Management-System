@@ -10,43 +10,30 @@
       </v-tabs>
 
       <v-card-text>
-        <v-window v-model="tab">
-          <v-window-item class="d-flex justify-center" value="locations">
-            <LocationTable v-if="tab === 'locations'" class="table"/>
-          </v-window-item>
-
-          <v-window-item value="habitats">
-          </v-window-item>
-
-          <v-window-item value="populations">
-            Populations Table
-          </v-window-item>
-
-          <v-window-item value="species">
-            Species Table
-          </v-window-item>
-
-          <v-window-item value="researchers">
-            Researchers Table
-          </v-window-item>
-
-          <v-window-item value="organizations">
-            Organizations Table
-          </v-window-item>
-        </v-window>
+        <LocationTable v-if="tab === 'locations'" class="table"/>
+        <HabitatTable v-if="tab === 'habitats'" class="table" />
+        <PopulationTable v-if="tab === 'populations'" class="table" />
+        <SpeciesTable v-if="tab === 'species'" class="table" />
+        <ResearcherTable v-if="tab === 'researchers'" class="table" />
+        <OrganizationTable v-if="tab === 'organizations'" class="table" />
       </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import HabitatTable from './HabitatTable.vue'
 import LocationTable from './LocationTable.vue'
+import PopulationTable from './PopulationTable.vue'
+import SpeciesTable from './SpeciesTable.vue'
+import ResearcherTable from './ResearcherTable.vue'
+import OrganizationTable from './OrganizationTable.vue'
 
 export default defineComponent({
-  components: { LocationTable },
+  components: { LocationTable, HabitatTable, PopulationTable, SpeciesTable, ResearcherTable, OrganizationTable },
   data() {
     return  {
-      tab: null,
+      tab: 'locations',
       labels: ['locations', 'habitats', 'populations', 'species', 'researchers', 'organizations']
     }
   }
@@ -55,6 +42,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .table {
-  margin: 1rem;
+  margin: 2rem;
 }
 </style>
