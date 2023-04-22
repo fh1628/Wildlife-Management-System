@@ -12,8 +12,8 @@
     </thead>
     <tbody>
       <tr
-        v-for="item in data"
-        :key="item.name"
+        v-for="(row,key) in data"
+        :key="key"
       >
         <td>{{ item.name }}</td>
         <td>{{ item.calories }}</td>

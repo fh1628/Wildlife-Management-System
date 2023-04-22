@@ -3,8 +3,9 @@ import sqlite3
 import json
 import mysql.connector
 from flask import Flask, jsonify
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/create_tables')
 def create_tables():
@@ -93,34 +94,6 @@ def create_prerequisites():
     create_views()
     create_indices()
     return "Tables, views, and indices created successfully"
-
-
-@app.route('/generate_sample_data')
-def generate_sample_data():
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="password",
-        database="WILDLIFE_SCHEMA"
-    )   
-
-    cursor = conn.cursor()
-
-    with open('GENERATE_SAMPLE_DATA.sql', 'r') as sql_file:
-        sql_script = sql_file.read()
-
-    sql_statements = sql_script.split(';')
-
-    for statement in sql_statements:
-        if statement.strip() != '':
-            cursor.execute(statement)
-
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-
-    return 'Sample data created successfully'
 
 
 @app.route('/add_location', methods=['POST'])
@@ -449,7 +422,7 @@ def get_locations():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
