@@ -11,7 +11,7 @@ def create_tables():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         # database="WILDLIFE_FLASK_SCHEMA"
     )   
 
@@ -38,7 +38,7 @@ def create_views():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -65,7 +65,7 @@ def create_indices():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -110,7 +110,7 @@ def add_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -125,6 +125,33 @@ def add_location():
     cursor.close()
     conn.close()
     return 'Location added'
+
+@app.route('/generate_sample_data')
+def generate_sample_data():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    with open('GENERATE_SAMPLE_DATA.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+
+    sql_statements = sql_script.split(';')
+
+    for statement in sql_statements:
+        if statement.strip() != '':
+            cursor.execute(statement)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Sample data created successfully'
 
 @app.route('/add_habitat', methods=['POST'])
 def add_habitat():
@@ -142,7 +169,7 @@ def add_habitat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -178,7 +205,7 @@ def add_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -209,7 +236,7 @@ def add_population():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -237,7 +264,7 @@ def add_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -283,7 +310,7 @@ def add_research_project():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -310,7 +337,7 @@ def add_research_interest():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -341,7 +368,7 @@ def add_conservation_organization():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -371,7 +398,7 @@ def add_assistant_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="password",
+        password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
