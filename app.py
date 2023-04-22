@@ -416,3 +416,19 @@ def add_assistant_researcher():
     cursor.close()
     conn.close()
     return 'Assistant Researcher added'
+
+@app.route('/get_locations', methods=['GET'])
+def get_locations():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="password",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    query = "SELECT * FROM LOCATION"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
