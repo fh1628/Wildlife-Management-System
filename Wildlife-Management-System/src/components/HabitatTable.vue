@@ -1,5 +1,43 @@
 <template>
-    <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" />
+    <div class="main-table-container">
+        <div class="filters">
+            <v-card class="filter-container">
+                <div class="filter-title">
+                    <v-icon icon="mdi-filter-variant"></v-icon>
+                    <p class="filter-text">Filter by</p>
+                </div>
+                <v-divider />
+                <div class="filter-options">
+                    <v-autocomplete
+                        width="80%"
+                        label="Type"
+                        variant="underlined"
+                        :items="getData('Type')"
+                    ></v-autocomplete>
+                    <v-autocomplete
+                        label="Conservation Status"
+                        variant="underlined"
+                        :items="getData('Conservation Status')"
+                    ></v-autocomplete>
+                </div>
+            </v-card>
+            <v-card class="filter-container">
+                <div class="filter-title">
+                    <v-icon icon="mdi-sort"></v-icon>
+                    <p class="filter-text">Sort by</p>
+                </div>
+                <v-divider />
+                <div class="sort-options">
+                    <v-checkbox
+                        label="Degradation Level"
+                    />
+                </div>
+            </v-card>
+        </div>
+        <v-card style="padding: 1rem;">
+            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" />
+        </v-card>
+    </div>
 </template>
 
 
@@ -25,6 +63,19 @@ export default defineComponent({
             primaryKeys: ['Name'],
             tableData: [],
         }
+    },
+    methods: {
+        index(val) {
+            return this.headerLabels.indexOf(val)
+        },
+        getData(val) {
+            if (!this.tableData.length) {
+                return []
+            }
+            const idx = this.index(val)
+            const dataArray = this.tableData.map((row) => row[idx])
+            return [... new Set(dataArray)] 
+        },
     }
     
 })
