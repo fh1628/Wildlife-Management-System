@@ -12,7 +12,7 @@ def create_tables():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         # database="WILDLIFE_FLASK_SCHEMA"
     )   
 
@@ -39,7 +39,7 @@ def create_views():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -66,7 +66,7 @@ def create_indices():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -112,7 +112,7 @@ def add_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -157,7 +157,7 @@ def update_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -180,7 +180,7 @@ def generate_sample_data():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -218,7 +218,7 @@ def add_habitat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -267,7 +267,7 @@ def add_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -298,7 +298,7 @@ def add_population():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -326,7 +326,7 @@ def add_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -372,7 +372,7 @@ def add_research_project():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -399,7 +399,7 @@ def add_research_interest():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -430,7 +430,7 @@ def add_conservation_organization():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -460,7 +460,7 @@ def add_assistant_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -482,7 +482,7 @@ def get_locations():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -498,7 +498,7 @@ def get_habitats():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -514,7 +514,7 @@ def get_populations():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -530,7 +530,7 @@ def get_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -546,7 +546,7 @@ def get_researchers():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -563,7 +563,7 @@ def get_assistant_researchers():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -579,7 +579,7 @@ def get_conservation_organization():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -598,7 +598,7 @@ def del_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -624,15 +624,15 @@ def del_habitat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
-
-    name = request.json["habitat_name"]
+    data = request.json
+    name = data.get("habitat_name",None)
 
     cursor = conn.cursor()
-    query = "DELETE FROM Habitat WHERE  HabitatName = %s"
-    cursor.execute(query, name)
+    query = "DELETE FROM Habitat WHERE HabitatName = %s"
+    cursor.execute(query,(name,))
     
     conn.commit()
 
@@ -646,16 +646,16 @@ def del_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
     data = request.json
-    scientific_name = data.get('scientific_name')
+    scientific_name = data.get('scientific_name',None)
 
     cursor = conn.cursor()
-    query = "DELETE FROM Species WHERE  ScientificName = '%s'"
-    cursor.execute(query, scientific_name)
+    query = "DELETE FROM Species WHERE  ScientificName = %s"
+    cursor.execute(query, (scientific_name,))
     
     conn.commit()
 
@@ -663,13 +663,132 @@ def del_species():
     conn.close()
     return 'Species Deleted'
 
+@app.route('/del_population', methods=['DELETE'])
+def del_population():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    id = data.get('population_id',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Population WHERE  PopulationID = %s"
+    cursor.execute(query, (id,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Population Deleted'
+
+
+@app.route('/del_researcher', methods=['DELETE'])
+def del_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('reseracher_email',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Researcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher Deleted'
+
+@app.route('/del_assistant_researcher', methods=['DELETE'])
+def del_assistant_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    assistant_email = data.get('assistant_email',None)
+    researcher_email = data.get('researcher_email',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM AssistantResearcher WHERE Email = %s AND ResearcherEmail = %s"
+    cursor.execute(query, (assistant_email,researcher_email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Assistant Researcher Deleted'
+
+
+@app.route('/del_conservation_org', methods=['DELETE'])
+def del_conservation_org():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('organization_email',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM ConservationOrganization WHERE ContactEmail = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Organization Deleted'
+
+
+@app.route('/del_organisation_protects', methods=['DELETE'])
+def del_organisation_protects():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('organization_email',None)
+    population = data.get('population_id',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Protects WHERE ContactEmail = %s AND PopulationID = %s"
+    cursor.execute(query, (email,population,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Organization protects population Deleted'
 
 @app.route('/get_locations_filtered', methods=['GET'])
 def get_locations_filtered():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -681,7 +800,7 @@ def get_locations_filtered():
     query = "SELECT * FROM LOCATION WHERE "
     conditions = []
     for column, value in data.items():
-        conditions.append(f"{column} = '{value}'")
+        conditions.append(f"{column} = {value}")
     query += " AND ".join(conditions)
     print(query)
     cursor.execute(query)
@@ -691,12 +810,15 @@ def get_locations_filtered():
     return jsonify(rows)
 
 
+
+
+
 @app.route('/get_populations_filtered', methods=['GET'])
 def get_populations_filtered():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()

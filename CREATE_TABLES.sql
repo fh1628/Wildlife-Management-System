@@ -8,9 +8,9 @@ CREATE TABLE Location (
   LocationName VARCHAR(255),
   LocationType VARCHAR(50),
   Country VARCHAR(50),
-  Area DECIMAL(10,2),
+  Area DECIMAL(10,1),
   Climate VARCHAR(50),
-  Elevation DECIMAL(6,2),
+  Elevation DECIMAL(7,2),
   PRIMARY KEY (Latitude, Longitude)
 );
 
@@ -64,7 +64,8 @@ CREATE TABLE Researcher (
   Expertise VARCHAR(255),
   SpeciesScientificName VARCHAR(255),
   PopulationID INT,
-  FOREIGN KEY (PopulationID) REFERENCES Population (PopulationID) ON DELETE SET NULL
+  FOREIGN KEY (PopulationID) REFERENCES Population (PopulationID) ON DELETE SET NULL,
+  FOREIGN KEY (SpeciesScientificName) REFERENCES Species (ScientificName) ON DELETE SET NULL
 );
 
 CREATE TABLE AssistantResearcher (
