@@ -26,18 +26,27 @@
                 <v-divider />
                 <div class="filter-options">
                     <v-autocomplete
+                        v-model="filterType"
+                        clearable
                         width="80%"
                         label="Type"
+                        :key="filterType"
                         variant="underlined"
                         :items="getData('Type')"
                     ></v-autocomplete>
                     <v-autocomplete
+                        v-model="filterCountry"
+                        clearable
                         label="Country"
+                        :key="filterCountry"
                         variant="underlined"
                         :items="getData('Country')"
                     ></v-autocomplete>
                     <v-autocomplete
+                        v-model="filterClimate"
+                        clearable
                         label="Climate"
+                        :key="filterClimate"
                         variant="underlined"
                         :items="getData('Climate')"
                     ></v-autocomplete>
@@ -57,7 +66,8 @@
             </v-card>
         </div>
         <v-card style="padding: 1rem;">
-            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" @updateRow="(val)=>updateLocation(val)" />
+            {{ originalData }}
+            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" :types="types" @updateRow="(val)=>updateLocation(val)" />
         </v-card>
     </div>
 </template>
@@ -79,7 +89,10 @@ export default defineComponent({
         LocationService.getAllLocations()
         .then((response) => {
             this.tableData = response.data
+            this.originalData = response.data
         });
+        // LocationService.getFilteredLocation({Climate: 'Tropical'})
+        // .then((resp)=> this.temp = resp.data)
     },
     data() {
         return {
@@ -87,9 +100,14 @@ export default defineComponent({
             types:['number','number','text','text','text','number','text','number'],
             primaryKeys: ['Latitude', 'Longitude'],
             tableData: [],
+            originalData: [],
             snackbar:false,
             text: '',
             timeout: 2000,
+            temp: [],
+            filterType: null,
+            filterCountry: null,
+            filterClimate: null
         }
     },
     methods: {
@@ -97,12 +115,10 @@ export default defineComponent({
             return this.headerLabels.indexOf(val)
         },
         getData(val) {
-            if (!this.tableData.length) {
-                return []
-            }
             const idx = this.index(val)
-            const dataArray = this.tableData.map((row) => row[idx])
-            return [... new Set(dataArray)] 
+            const dataArray = this.originalData.map((row) => row[idx])
+            console.log(val,dataArray)
+            return [... new Set(dataArray)]
         },
         async fetchData() {
             return LocationService.getAllLocations()
@@ -117,8 +133,13 @@ export default defineComponent({
                 this.text = 'Location was added successfully!'
                 this.snackbar = true
             })
-            .catch(()=> {
-                alert('Cannot add duplicate primary key!')
+            .catch((error)=> {
+                console.log(error)
+                if (error.response.status === 400){
+                    const error_msg = error.response.data.error === 'Duplicate' ? "Cannot insert duplicate primary key." : "Foreign key does not exist in table.";
+                    alert('Integrity error! ' + error_msg)
+                }
+                else alert('SERVER ERROR!')
             })
         },
         async updateLocation(arr) {
@@ -131,7 +152,33 @@ export default defineComponent({
             })
         }
     },
+    watch: {
+        filterObject(newFilter) {
+            if (Object.keys(newFilter).length) {
+                LocationService.getFilteredLocation(newFilter)
+                .then((resp) => {
+                    this.text = 'Filter applied!'
+                    this.snackbar = true
+                    this.tableData = resp.data
+                })
+            }
+            else this.tableData = this.originalData
+        }
+    },
     computed: {
+        filterObject(){
+            const object = {}
+            if (this.filterType) {
+                object['LocationType'] = this.filterType
+            }
+            if (this.filterCountry) {
+                object['Country'] = this.filterCountry
+            }
+            if (this.filterClimate) {
+                object['Climate'] = this.filterClimate
+            }
+            return object
+        } 
     }
     
 })
