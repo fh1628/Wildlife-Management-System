@@ -600,12 +600,12 @@ def del_habitat():
         password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
-
-    name = request.json["habitat_name"]
+    data = request.json
+    name = data.get("habitat_name",None)
 
     cursor = conn.cursor()
-    query = "DELETE FROM Habitat WHERE  HabitatName = %s"
-    cursor.execute(query, name)
+    query = "DELETE FROM Habitat WHERE HabitatName = %s"
+    cursor.execute(query,(name,))
     
     conn.commit()
 
@@ -624,11 +624,11 @@ def del_species():
     )   
 
     data = request.json
-    scientific_name = data.get('scientific_name')
+    scientific_name = data.get('scientific_name',None)
 
     cursor = conn.cursor()
-    query = "DELETE FROM Species WHERE  ScientificName = '%s'"
-    cursor.execute(query, scientific_name)
+    query = "DELETE FROM Species WHERE  ScientificName = %s"
+    cursor.execute(query, (scientific_name,))
     
     conn.commit()
 
@@ -636,6 +636,124 @@ def del_species():
     conn.close()
     return 'Species Deleted'
 
+@app.route('/del_population', methods=['DELETE'])
+def del_population():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    id = data.get('population_id',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Population WHERE  PopulationID = %s"
+    cursor.execute(query, (id,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Population Deleted'
+
+
+@app.route('/del_researcher', methods=['DELETE'])
+def del_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('reseracher_email',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Researcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher Deleted'
+
+@app.route('/del_assistant_researcher', methods=['DELETE'])
+def del_assistant_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('assistant_email',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM AssistantResearcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Assistant Researcher Deleted'
+
+
+@app.route('/del_conservation_org', methods=['DELETE'])
+def del_conservation_org():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('organization_email',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM ConservationOrganization WHERE ContactEmail = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Organization Deleted'
+
+
+@app.route('/del_organisation_protects', methods=['DELETE'])
+def del_organisation_protects():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    email = data.get('organization_email',None)
+    population = data.get('population_id',None)
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Protects WHERE ContactEmail = %s AND PopulationID = %s"
+    cursor.execute(query, (email,population,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Organization protects population Deleted'
 
 @app.route('/get_locations_filtered', methods=['GET'])
 def get_locations_filtered():
@@ -651,7 +769,7 @@ def get_locations_filtered():
     query = "SELECT * FROM LOCATION WHERE "
     conditions = []
     for column, value in data.items():
-        conditions.append(f"{column} {value}")
+        conditions.append(f"{column} = {value}")
     query += " AND ".join(conditions)
     
     cursor.execute(query)
@@ -659,6 +777,9 @@ def get_locations_filtered():
     cursor.close()
     conn.close()
     return jsonify(rows)
+
+
+
 
 
 @app.route('/get_populations_filtered', methods=['GET'])
