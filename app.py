@@ -128,6 +128,39 @@ def add_location():
     conn.close()
     return 'Location added'
 
+@app.route('/update_location', methods=['PUT'])
+def update_location():
+    data = request.json
+
+    latitude = request.json["latitude"]
+    longitude = request.json['longitude']
+    name = data.get('location_name', None)
+    location_type = data.get('location_type', None)
+    elevation = data.get('location_elevation', None)
+    country = data.get('location_country', None)
+    area = data.get('location_area', None)
+    climate = data.get('location_climate', None)
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update Location SET LocationName='%s' , LocationType='%s' ,Country='%s' ,Area=%f ,Climate='%s' ,Elevation=%f WHERE Latitude=%f AND Longitude=%f" %(name, location_type, country, area, climate, elevation, latitude, longitude)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Location updated'
+
+
 @app.route('/generate_sample_data')
 def generate_sample_data():
     conn = mysql.connector.connect(

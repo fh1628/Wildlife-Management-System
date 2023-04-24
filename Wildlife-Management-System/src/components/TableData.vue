@@ -7,7 +7,7 @@
   >
     <thead>
       <tr>
-        <th :class="['text-left','font-weight-bold', {'primary-key': isPrimaryKey(header)} ]" v-for="(header,key) in headerLabels" :key="key">
+        <th :class="['text-left','font-weight-bold', {'primary-key': isPrimaryKey(header)}, {'foreign-key': isForeignKey(header)} ]" v-for="(header,key) in headerLabels" :key="key" @click="()=>changeTab(header)">
           {{header}}
         </th>
         <th />
@@ -25,7 +25,10 @@
           <p v-else>{{ columnName(column) }}</p>
           </td>
         <td>
-          <v-btn v-if="selectedRow === key" color="green" variant="tonal" icon="mdi-check" size="small" @click="selectedRow = null" />
+          <v-btn v-if="selectedRow === key" color="green" variant="tonal" icon="mdi-check" size="small" @click="()=> {
+            updateRow([...row]);
+            selectedRow = null
+            }" />
           <v-btn v-else color="blue" variant="tonal" icon="mdi-pencil" size="small" @click="()=> {selectedRow = key}" :disabled="selectedRow !== null" />
         </td>
         <td><v-btn color="red" variant="tonal" icon="mdi-delete" size="small" :disabled="selectedRow !== null && selectedRow !== key" /></td>
@@ -47,6 +50,10 @@ export default defineComponent({
             type: Array,
             required: false,
         },
+        foreignKeys: {
+            type: Array,
+            required: false,
+        },
         data: {
             type: Array,
             required: true,
@@ -61,6 +68,9 @@ export default defineComponent({
       test(column) {
         console.log(column)
       },
+      updateRow(dataArray) {
+        this.$emit('updateRow', dataArray)
+      },
       isPrimaryKey(value) {
         return this.primaryKeys.includes(value) || this.primaryIndex.includes(value)
       },
@@ -69,6 +79,21 @@ export default defineComponent({
       },
       index(val) {
         return this.primaryKeys.indexOf(val);
+      },
+      changeTab(key) {
+        this.$emit('changeTab', this.findTabToChange(key));
+      },
+      findTabToChange(key) {
+        if (!this.isForeignKey(key)) return;
+        const tempObj = this.foreignKeys.find((obj) => (obj[key]))
+        return tempObj[key]
+      },
+      isForeignKey(key) {
+        if (!this.foreignKeys) {
+          return false;
+        }
+        const search = this.foreignKeys.find((obj) => obj[key])
+        return search
       }
     },
     computed: {
@@ -86,6 +111,11 @@ export default defineComponent({
       font-weight: 600;
       color: red;
     } 
+    .foreign-key {
+      font-style: italic;
+      color: blue;
+      cursor:pointer;
+    }
 }
 }
 </style>

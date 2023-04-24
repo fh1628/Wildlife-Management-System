@@ -1,6 +1,23 @@
 <template>
     <div class="main-table-container">
         <div class="filters">
+             <v-snackbar
+                v-model="snackbar"
+                :timeout="timeout"
+                >
+                {{ text }}
+
+                <template v-slot:actions>
+                    <v-btn
+                    color="blue"
+                    variant="text"
+                    @click="snackbar = false"
+                    >
+                    Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+            <add-dialog @submit="(data)=>addLocation(data)" :labels="headerLabels" :types="types" class="create-btn" />
             <v-card class="filter-container">
                 <div class="filter-title">
                     <v-icon icon="mdi-filter-variant"></v-icon>
@@ -40,7 +57,7 @@
             </v-card>
         </div>
         <v-card style="padding: 1rem;">
-            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" />
+            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" @updateRow="(val)=>updateLocation(val)" />
         </v-card>
     </div>
 </template>
@@ -50,10 +67,12 @@
 import { defineComponent } from 'vue'
 import TableData from './TableData.vue'
 import LocationService from "../api/LocationService"
+import AddDialog from './AddDialog.vue'
 
 export default defineComponent({
     components: {
         TableData,
+        AddDialog,
     },
     mounted () {
         console.log('mounted')
@@ -65,8 +84,12 @@ export default defineComponent({
     data() {
         return {
             headerLabels: ['Latitude', 'Longitude', 'Name', 'Type', 'Country','Area', 'Climate',  'Elevation'],
+            types:['number','number','text','text','text','number','text','number'],
             primaryKeys: ['Latitude', 'Longitude'],
             tableData: [],
+            snackbar:false,
+            text: '',
+            timeout: 2000,
         }
     },
     methods: {
@@ -81,6 +104,32 @@ export default defineComponent({
             const dataArray = this.tableData.map((row) => row[idx])
             return [... new Set(dataArray)] 
         },
+        async fetchData() {
+            return LocationService.getAllLocations()
+            .then((response) => {
+                this.tableData = response.data
+            });
+        },
+        async addLocation(dataArray) {
+            LocationService.addLocation(dataArray)
+            .then(async ()=> {
+                await this.fetchData(); 
+                this.text = 'Location was added successfully!'
+                this.snackbar = true
+            })
+            .catch(()=> {
+                alert('Cannot add duplicate primary key!')
+            })
+        },
+        async updateLocation(arr) {
+            console.log('new arr', arr)
+            LocationService.updateLocation(arr)
+            .then((res)=> {
+                console.log(res.data)
+                this.text = 'Location was updated successfully!'
+                this.snackbar = true
+            })
+        }
     },
     computed: {
     }
@@ -93,8 +142,14 @@ export default defineComponent({
     display: flex;
     align-items: center;
     .filters {
-        width: 15%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 17%;
         margin-right: 2rem;
+        .create-btn {
+            margin-bottom: 2rem;
+        }
         .filter-container{
             margin-bottom: 2rem;
             .filter-title{
