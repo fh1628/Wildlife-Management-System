@@ -100,14 +100,14 @@ def create_prerequisites():
 def add_location():
     data = request.json
 
-    latitude = request.json["latitude"]
-    longitude = request.json['longitude']
-    name = data.get('location_name', None)
-    location_type = data.get('location_type', None)
-    elevation = data.get('location_elevation', None)
-    country = data.get('location_country', None)
-    area = data.get('location_area', None)
-    climate = data.get('location_climate', None)
+    latitude = request.json["Latitude"]
+    longitude = request.json['Longitude']
+    name = data.get('LocationName', None)
+    location_type = data.get('LocationType', None)
+    elevation = data.get('Elevation', None)
+    country = data.get('Country', None)
+    area = data.get('Area', None)
+    climate = data.get('Climate', None)
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -120,7 +120,20 @@ def add_location():
 
     query = "INSERT INTO Location (Latitude, Longitude, LocationName, LocationType, Country, Area, Climate, Elevation) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     values = (latitude, longitude, name, location_type, country, area, climate, elevation)
-    cursor.execute(query, values)
+    try:
+        cursor.execute(query, values)
+    
+    except mysql.connector.IntegrityError as e:
+        # Handle the IntegrityError
+        error_msg = str(e)
+        if (error_msg.startswith('1062')):
+            error_msg = 'Duplicate'
+        else:
+            error_msg = 'Foreign'
+        return jsonify({'error': error_msg}), 400
+    except Exception as e:
+        # Handle any other exceptions
+        return jsonify({'error': str(e)}), 500
 
     conn.commit()
 
@@ -150,9 +163,10 @@ def update_location():
 
     cursor = conn.cursor()
 
-    query = "Update Location SET LocationName='%s' , LocationType='%s' ,Country='%s' ,Area=%f ,Climate='%s' ,Elevation=%f WHERE Latitude=%f AND Longitude=%f" %(name, location_type, country, area, climate, elevation, latitude, longitude)
+    query = "Update Location SET LocationName=%s , LocationType=%s ,Country=%s ,Area=%s ,Climate=%s ,Elevation=%s WHERE Latitude=%s AND Longitude=%s"
     print(query)
-    cursor.execute(query)
+    values = (name, location_type, country, area, climate, elevation, latitude, longitude)
+    cursor.execute(query, values)
 
     conn.commit()
 
@@ -212,8 +226,21 @@ def add_habitat():
 
     query = "INSERT INTO Habitat (HabitatName, HabitatType, ConservationStatus, DegradationLevel, Latitude, Longitude) VALUES (%s, %s, %s, %s, %s, %s)"
     values = (name, habitat_type, conservation_status, degradation_level, latitude, longitude)
-    cursor.execute(query, values)
-
+    try:
+        cursor.execute(query, values)
+    
+    except mysql.connector.IntegrityError as e:
+        # Handle the IntegrityError
+        error_msg = str(e)
+        if (error_msg.startswith('1062')):
+            error_msg = 'Duplicate'
+        else:
+            error_msg = 'Foreign'
+        return jsonify({'error': error_msg}), 400
+    except Exception as e:
+        # Handle any other exceptions
+        return jsonify({'error': str(e)}), 500
+    
     for i in range(len(all_threats)):
         query = "INSERT INTO HThreats (HabitatName, Threat) VALUES(%s, %s)"
         values = (name, all_threats[i])
@@ -646,14 +673,17 @@ def get_locations_filtered():
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
-    data = request.json
+    data = request.args
+
+    print('data',data)
+    print(data.items())
 
     query = "SELECT * FROM LOCATION WHERE "
     conditions = []
     for column, value in data.items():
-        conditions.append(f"{column} {value}")
+        conditions.append(f"{column} = '{value}'")
     query += " AND ".join(conditions)
-    
+    print(query)
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()
@@ -677,7 +707,7 @@ def get_populations_filtered():
     for column, value in data.items():
         conditions.append(f"{column} = '{value}'")
     query += " AND ".join(conditions)
-    
+    print(query)
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()
