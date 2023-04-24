@@ -496,3 +496,157 @@ def get_researchers():
     cursor.close()
     conn.close()
     return jsonify(rows)
+
+
+@app.route('/get_assistant_researchers', methods=['GET'])
+def get_assistant_researchers():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    query = "SELECT * FROM AssistantResearcher"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/get_conservation_organization', methods=['GET'])
+def get_conservation_organization():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    query = "SELECT * FROM ConservationOrganization"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/del_location', methods=['DELETE'])
+def del_location():
+
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    latitude = request.json["Latitude"]
+    longitude = request.json['Longitude']
+
+    cursor = conn.cursor()
+    query = "DELETE FROM LOCATION WHERE  Latitude= %s AND Longitude = %s"
+    val = (latitude, longitude)
+    cursor.execute(query, val)
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Location Deleted'
+
+
+@app.route('/del_habitat', methods=['DELETE'])
+def del_habitat():
+
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    name = request.json["habitat_name"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Habitat WHERE  HabitatName = %s"
+    cursor.execute(query, name)
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Habitat Deleted'
+
+@app.route('/del_species', methods=['DELETE'])
+def del_species():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.json
+    scientific_name = data.get('scientific_name')
+
+    cursor = conn.cursor()
+    query = "DELETE FROM Species WHERE  ScientificName = '%s'"
+    cursor.execute(query, scientific_name)
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Species Deleted'
+
+
+@app.route('/get_locations_filtered', methods=['GET'])
+def get_locations_filtered():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.json
+
+    query = "SELECT * FROM LOCATION WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} {value}")
+    query += " AND ".join(conditions)
+    
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_populations_filtered', methods=['GET'])
+def get_populations_filtered():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.json
+
+    query = "SELECT * FROM Population WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)

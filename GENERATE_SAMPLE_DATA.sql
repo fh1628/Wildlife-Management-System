@@ -40,7 +40,9 @@ VALUES
     ('Ueno Park', 'Overuse'),
     ('Bosque de Chapultepec', 'Invasive Species'),
     ('Jardin des Tuileries', 'Habitat Loss'),
-    ('Golden Gate Park', 'Overuse');
+    ('Golden Gate Park', 'Overuse'),
+    ('Mount Siguniang', 'Overuse'),
+    ('Mount Daxue', 'Overuse');
 
 -- Species
 INSERT INTO Species (ScientificName, CommonName, ConservationStatus, GeographicDistribution)
