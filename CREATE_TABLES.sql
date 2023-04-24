@@ -3,14 +3,14 @@ CREATE SCHEMA WILDLIFE_SCHEMA;
 USE WILDLIFE_SCHEMA;
 
 CREATE TABLE Location (
-  Latitude FLOAT NOT NULL,
-  Longitude FLOAT NOT NULL,
+  Latitude DECIMAL(10,8) NOT NULL,
+  Longitude DECIMAL(10,8) NOT NULL,
   LocationName VARCHAR(255),
   LocationType VARCHAR(50),
   Country VARCHAR(50),
-  Area FLOAT,
+  Area DECIMAL(10,8),
   Climate VARCHAR(50),
-  Elevation FLOAT,
+  Elevation DECIMAL(10,8),
   PRIMARY KEY (Latitude, Longitude)
 );
 
@@ -19,8 +19,8 @@ CREATE TABLE Habitat (
   HabitatType VARCHAR(50),
   ConservationStatus VARCHAR(50),
   DegradationLevel VARCHAR(50),
-  Latitude FLOAT,
-  Longitude FLOAT,
+  Latitude DECIMAL(10,8),
+  Longitude DECIMAL(10,8),
   FOREIGN KEY (Latitude, Longitude) REFERENCES Location (Latitude, Longitude) ON DELETE CASCADE
 );
 
@@ -49,8 +49,8 @@ CREATE TABLE Population (
 	  PopulationID INT PRIMARY KEY,
 	  Size INT,
 	  Trend VARCHAR(50),
-	  GrowthRate DECIMAL(5, 2),
-	  Density DECIMAL(10, 2),
+	  GrowthRate DECIMAL(10,8),
+	  Density DECIMAL(10,8),
 	  HabitatName VARCHAR(255),
 	  SpeciesScientificName VARCHAR(255),
 	  FOREIGN KEY (HabitatName) REFERENCES Habitat(HabitatName) ON DELETE CASCADE,

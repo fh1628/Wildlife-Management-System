@@ -11,10 +11,10 @@
 
       <v-card-text>
         <LocationTable v-if="tab === 'locations'" class="table"/>
-        <HabitatTable v-if="tab === 'habitats'" class="table" />
-        <PopulationTable v-if="tab === 'populations'" class="table" />
+        <HabitatTable v-if="tab === 'habitats'" class="table" @changeTab="(val) => {tab = val}" />
+        <PopulationTable v-if="tab === 'populations'" class="table" @changeTab="(val) => {tab = val}" />
         <SpeciesTable v-if="tab === 'species'" class="table" />
-        <ResearcherTable v-if="tab === 'researchers'" class="table" />
+        <ResearcherTable v-if="tab === 'researchers'" class="table" @changeTab="(val) => {tab = val}" />
         <OrganizationTable v-if="tab === 'organizations'" class="table" />
       </v-card-text>
   </v-card>

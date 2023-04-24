@@ -35,7 +35,7 @@
             </v-card>
         </div>
         <v-card style="padding: 1rem;">
-            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" />
+            <TableData @changeTab="(val)=> $emit('changeTab',val)" :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" :foreign-keys="foreignKeys" />
         </v-card>
     </div>
 </template>
@@ -61,6 +61,7 @@ export default defineComponent({
         return {
             headerLabels: ['Name', 'Type', 'Conservation Status', 'Degradation Level', 'Latitude','Longitude'],
             primaryKeys: ['Name'],
+            foreignKeys: [{'Latitude': 'locations'}, {'Longitude': 'locations'}],
             tableData: [],
         }
     },
