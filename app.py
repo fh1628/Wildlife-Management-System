@@ -12,7 +12,7 @@ def create_tables():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         # database="WILDLIFE_FLASK_SCHEMA"
     )   
 
@@ -39,7 +39,7 @@ def create_views():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -66,7 +66,7 @@ def create_indices():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -88,12 +88,38 @@ def create_indices():
 
     return 'Indices created successfully'
 
+
+
+@app.route('/create_procedures_for_queries')
+def create_procedures_for_queries():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    with open('%QUERIES.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+
+    sql_statements = sql_script   
+    cursor.execute(sql_statements)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Querie created successfully'
+
 @app.route('/create_prerequisites')
 def create_prerequisites():
     create_tables()
     create_views()
     create_indices()
-    return "Tables, views, and indices created successfully"
+    return "Tables, views, and indices, and stored procedures created successfully"
 
 
 @app.route('/add_location', methods=['POST'])
@@ -112,7 +138,7 @@ def add_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -157,7 +183,7 @@ def update_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -180,7 +206,7 @@ def generate_sample_data():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -218,7 +244,7 @@ def add_habitat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -267,7 +293,7 @@ def add_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -298,7 +324,7 @@ def add_population():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -326,7 +352,7 @@ def add_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -372,7 +398,7 @@ def add_research_project():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -399,7 +425,7 @@ def add_research_interest():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -430,7 +456,7 @@ def add_conservation_organization():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -460,7 +486,7 @@ def add_assistant_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -482,7 +508,7 @@ def get_locations():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -498,7 +524,7 @@ def get_habitats():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -514,7 +540,7 @@ def get_populations():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -530,7 +556,7 @@ def get_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -546,7 +572,7 @@ def get_researchers():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -563,7 +589,7 @@ def get_assistant_researchers():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -579,7 +605,7 @@ def get_conservation_organization():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -598,7 +624,7 @@ def del_location():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -624,7 +650,7 @@ def del_habitat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     
@@ -646,7 +672,7 @@ def del_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -668,7 +694,7 @@ def del_population():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -691,7 +717,7 @@ def del_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -713,7 +739,7 @@ def del_assistant_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -737,7 +763,7 @@ def del_conservation_org():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -760,7 +786,7 @@ def del_organisation_protects():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -784,7 +810,7 @@ def del_habitat_threat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -807,7 +833,7 @@ def del_species_threat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -831,7 +857,7 @@ def del_researcher_project():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -855,7 +881,7 @@ def del_researcher_interest():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -878,7 +904,7 @@ def del_university_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -901,7 +927,7 @@ def del_company_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -933,7 +959,7 @@ def update_habitat():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -967,7 +993,7 @@ def update_population():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -996,7 +1022,7 @@ def update_species():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -1027,7 +1053,7 @@ def update_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -1056,7 +1082,7 @@ def update_conservation_org():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -1084,7 +1110,7 @@ def update_assistant_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -1114,7 +1140,7 @@ def update_university_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -1145,7 +1171,7 @@ def update_company_researcher():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
 
@@ -1166,7 +1192,7 @@ def get_locations_filtered():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -1193,7 +1219,7 @@ def get_populations_filtered():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="youss123",
+        password="45Qxz-78u",
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
@@ -1205,6 +1231,109 @@ def get_populations_filtered():
         conditions.append(f"{column} = '{value}'")
     query += " AND ".join(conditions)
     print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+
+@app.route('/get_species_in_location', methods=['GET'])
+def get_species_in_location():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+    data = request.args
+    name = data.get('location_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_species_in_location(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_habitats_of_species', methods=['GET'])
+def get_habitats_of_species():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.args
+    name = data.get('species_common_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_habitats_of_species(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_population_of_species', methods=['GET'])
+def get_population_of_species():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.args
+    name = data.get('species_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_population_of_species(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_researchers_of_species', methods=['GET'])
+def get_researchers_of_species():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.args
+    name = data.get('species_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_researchers_of_species(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/sort_habitats_by_degradation', methods=['GET'])
+def sort_habitats_by_degradation():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="45Qxz-78u",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+
+    cursor = conn.cursor()
+    query = "CALL sort_habitats_by_degradation()"
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()
