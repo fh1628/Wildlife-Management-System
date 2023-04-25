@@ -28,6 +28,14 @@
                     <v-autocomplete
                         clearable
                         width="80%"
+                        label="Location"
+                        variant="underlined"
+                        v-model="filterLocation"
+                        :items="locationItems"
+                    ></v-autocomplete>
+                    <v-autocomplete
+                        clearable
+                        width="80%"
                         label="Conservation Status"
                         variant="underlined"
                         v-model="filterStatus"
@@ -72,6 +80,7 @@ import { defineComponent } from 'vue'
 import TableData from './TableData.vue'
 import SpeciesService from "../api/SpeciesService"
 import AddDialog from './AddDialog.vue'
+import LocationService from '../api/LocationService'
 
 export default defineComponent({
     components: {
@@ -89,6 +98,8 @@ export default defineComponent({
             filterStatus: null,
             filterDist: null,
             statusItems: [],
+            locationItems: [],
+            filterLocation: null,
             filterItems: [],
             snackbar:false,
             text: '',
@@ -110,12 +121,15 @@ export default defineComponent({
             if (this.filterDist) {
                 object['GeographicDistribution'] = this.filterDist
             }
+            if (this.filterLocation) {
+                console.log('ok')
+            }
             return object
         } 
     },
     methods: {
         async fetch() {
-            SpeciesService.getFilteredSpecies(this.filterObject)
+            if (!this.filterLocation) SpeciesService.getFilteredSpecies(this.filterObject)
             .then((response) => {
                 this.tableData = response.data
             })
@@ -136,6 +150,17 @@ export default defineComponent({
                 this.distItems = [... new Set(data.map(d=>d[0]))]
 
             })
+
+            LocationService.getColumn({'LocationName':''})
+            .then((resp) => {
+                const data = resp.data
+                this.locationItems = [...new Set(data.map(d=>d[0]))]
+            })
+            
+            if (this.filterLocation){
+                SpeciesService.getByPopulation(this.filterLocation)
+                .then(resp => this.tableData = resp.data)
+            }
             // PopulationService.getColumn({'Climate':''})
             // .then((response) => {
             //     const data = response.data

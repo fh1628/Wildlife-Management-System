@@ -1583,10 +1583,10 @@ def get_species_in_location():
         database="WILDLIFE_SCHEMA"
     )   
     data = request.args
-    name = data.get('location_name', None)
+    name = data.get('LocationName', None)
     
     cursor = conn.cursor()
-    query = "CALL get_species_in_location(%s)"
+    query = "SELECT Species.ScientificName, Species.CommonName, Species.ConservationStatus, Species.GeographicDistribution FROM Species JOIN Population ON Species.ScientificName = Population.SpeciesScientificName WHERE Population.HabitatName IN (SELECT HabitatName FROM HABITAT_LOCATION_DETAILS WHERE LocationName=%s);"
     cursor.execute(query, (name,))
     rows = cursor.fetchall()
     cursor.close()
@@ -1665,10 +1665,17 @@ def sort_habitats_by_degradation():
         password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
-
-
+    data = request.args
+    add = ""
+    if (data):
+        add = " WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    add += " AND ".join(conditions)
     cursor = conn.cursor()
-    query = "CALL sort_habitats_by_degradation()"
+    query = "SELECT * FROM Habitat" + add +" ORDER BY CASE DegradationLevel WHEN 'Low' THEN 1 WHEN 'Moderate' THEN 2 WHEN 'High' THEN 3 END;"
+    print("PP1", query)
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()

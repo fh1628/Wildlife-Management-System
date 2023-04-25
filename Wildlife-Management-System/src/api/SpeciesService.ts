@@ -37,6 +37,9 @@ class SpeciesService extends APIService {
     getColumn(params: any) {
         return this.get('/get_species_column', params);
     }
+    getByPopulation(location: string) {
+        return this.get('/get_species_in_location', {LocationName: location})
+    }
 }
 
 export default new SpeciesService();

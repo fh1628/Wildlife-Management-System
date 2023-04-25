@@ -51,6 +51,7 @@
                 <div class="sort-options">
                     <v-checkbox
                         label="Degradation Level"
+                        v-model="sort"
                     />
                 </div>
             </v-card>
@@ -90,16 +91,21 @@ export default defineComponent({
             snackbar:false,
             text: '',
             timeout: 2000,
+            sort: false,
         }
     },
     watch: {
         filterObject(){
             this.fetch()
+        },
+        sort() {
+            this.fetch()
         }
     },
+
     methods: {
         async fetch() {
-            HabitatService.getFilteredHabitats(this.filterObject)
+            (!this.sort ? HabitatService.getFilteredHabitats(this.filterObject): HabitatService.sort(this.filterObject))
             .then((response) => {
                 this.tableData = response.data
             })

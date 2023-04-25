@@ -39,6 +39,9 @@ class HabitatService extends APIService {
         }
         return this.delete('/del_habitat', data)
     }
+    sort(params: any) {
+        return this.get('sort_habitats_by_degradation', params)
+    }
 }
 
 export default new HabitatService();
