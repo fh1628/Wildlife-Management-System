@@ -778,7 +778,144 @@ def del_organisation_protects():
     return 'Organization protects population Deleted'
 
 
+@app.route('/del_habitat_threat', methods=['DELETE'])
+def del_habitat_threat():
 
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    habitat_name = request.json["habitat_name"]
+    threat = request.json["threat"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM HThreats WHERE HabitatName = %s AND Threat = %s"
+    cursor.execute(query, (habitat_name,threat,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Habitat Threat Deleted'
+
+@app.route('/del_species_threat', methods=['DELETE'])
+def del_species_threat():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    species_name = request.json["species_name"]
+    threat = request.json["threat"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM SThreats WHERE ScientificName = %s AND Threat = %s"
+    cursor.execute(query, (species_name,threat,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Species Threat Deleted'
+
+
+@app.route('/del_researcher_project', methods=['DELETE'])
+def del_researcher_project():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+    project = request.json["project"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM RProjects WHERE Email = %s AND Project = %s"
+    cursor.execute(query, (email,project,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher Project Deleted'
+
+
+@app.route('/del_researcher_interest', methods=['DELETE'])
+def del_researcher_interest():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+    interest = request.json["research_interest"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM RInterests WHERE Email = %s AND ResearchInterests = %s"
+    cursor.execute(query, (email,interest,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher Interest Deleted'
+
+@app.route('/del_university_researcher', methods=['DELETE'])
+def del_university_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM UniversityResearcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'University Researcher Deleted'
+
+
+@app.route('/del_company_researcher', methods=['DELETE'])
+def del_company_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM CompanyResearcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Company Researcher Deleted'
 
 
 @app.route('/update_habitat', methods=['PUT'])
@@ -1023,8 +1160,6 @@ def update_company_researcher():
     cursor.close()
     conn.close()
     return 'Company Researcher updated'
-
-
 
 @app.route('/get_locations_filtered', methods=['GET'])
 def get_locations_filtered():
