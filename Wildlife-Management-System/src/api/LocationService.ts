@@ -32,8 +32,21 @@ class LocationService extends APIService {
         console.log("NEW DATA", data)
         return this.put('/update_location', data)
     }
+    deleteLocation(arr: any) {
+        const data = {
+            Latitude: arr[0],
+            Longitude: arr[1],
+        }
+        return this.delete('/del_location', data)
+    }
     getFilteredLocation(data: any) {
         return this.get('/get_locations_filtered', data)
+    }
+    getColumn(params: any) {
+        return this.get('/get_location_column', params);
+    }
+    sort(params:any) {
+        return this.get('/sort_location', params);
     }
 }
 

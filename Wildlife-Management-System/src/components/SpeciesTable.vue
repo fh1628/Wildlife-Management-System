@@ -1,6 +1,23 @@
 <template>
     <div class="main-table-container">
         <div class="filters">
+             <v-snackbar
+                v-model="snackbar"
+                :timeout="timeout"
+                >
+                {{ text }}
+
+                <template v-slot:actions>
+                    <v-btn
+                    color="blue"
+                    variant="text"
+                    @click="snackbar = false"
+                    >
+                    Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+            <add-dialog @submit="(data)=>addSpecies(data)" :labels="headerLabels" :types="types" text="Species" class="create-btn" />
             <v-card class="filter-container">
                 <div class="filter-title">
                     <v-icon icon="mdi-filter-variant"></v-icon>
@@ -9,15 +26,19 @@
                 <v-divider />
                 <div class="filter-options">
                     <v-autocomplete
+                        clearable
                         width="80%"
                         label="Conservation Status"
                         variant="underlined"
-                        :items="getData('Conservation Status')"
+                        v-model="filterStatus"
+                        :items="statusItems"
                     ></v-autocomplete>
                     <v-autocomplete
+                        clearable
                         label="Geographic Distribution"
                         variant="underlined"
-                        :items="getData('Geographic Distribution')"
+                        v-model="filterDist"
+                        :items="distItems"
                     ></v-autocomplete>
                     <!-- <v-autocomplete
                         label="Climate"
@@ -40,7 +61,7 @@
             </v-card> -->
         </div>
         <v-card style="padding: 1rem;">
-            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" />
+            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" :types="types" @updateRow="val=>updateSpecies(val)" @deleteRow="val=>deleteSpecies(val)" />
         </v-card>
     </div>
 </template>
@@ -50,26 +71,117 @@
 import { defineComponent } from 'vue'
 import TableData from './TableData.vue'
 import SpeciesService from "../api/SpeciesService"
+import AddDialog from './AddDialog.vue'
 
 export default defineComponent({
     components: {
-        TableData,
+        TableData, AddDialog
     },
     mounted () {
-        console.log('mounted')
-        SpeciesService.getAllSpecies()
-        .then((response) => {
-            this.tableData = response.data
-        });
+        this.fetch()
     },
     data() {
         return {
             headerLabels: ['Scientific Name', 'Common Name', 'Conservation Status', 'Geographic Distribution'],
+            types:['text','text','text','text'],
             primaryKeys: ['Scientific Name'],
             tableData: [],
+            filterStatus: null,
+            filterDist: null,
+            statusItems: [],
+            filterItems: [],
+            snackbar:false,
+            text: '',
+            timeout: 2000,
         }
     },
+    watch: {
+        filterObject() {
+            console.log("CJHANGED")
+            this.fetch()
+        },
+    },
+    computed: {
+        filterObject(){
+            const object = {}
+            if (this.filterStatus) {
+                object['ConservationStatus'] = this.filterStatus
+            }
+            if (this.filterDist) {
+                object['GeographicDistribution'] = this.filterDist
+            }
+            return object
+        } 
+    },
     methods: {
+        async fetch() {
+            SpeciesService.getFilteredSpecies(this.filterObject)
+            .then((response) => {
+                this.tableData = response.data
+            })
+            // .then((response)=> this.tableData = response.data);
+            SpeciesService.getColumn({'ConservationStatus':''})
+            .then((response) => {
+                const data = response.data
+                // console.log(data)
+                const x = new Set(data.map(d=>d[0]))
+                // console.log([...x])
+
+                this.statusItems = [...new Set(data.map(d=>d[0]))]
+
+            })
+            SpeciesService.getColumn({'GeographicDistribution':''})
+            .then((response) => {
+                const data = response.data
+                this.distItems = [... new Set(data.map(d=>d[0]))]
+
+            })
+            // PopulationService.getColumn({'Climate':''})
+            // .then((response) => {
+            //     const data = response.data
+            //     this.climateItems = [.. Set(data.map(d=>d[0]))]
+            //     console.log(this.climateItems)
+
+            // })
+            
+            
+        },
+        async addSpecies(dataArray) {
+            SpeciesService.addSpecies(dataArray)
+            .then(async ()=> {
+                await this.fetch(); 
+                this.text = 'Species was added successfully!'
+                this.snackbar = true
+            })
+            .catch((error)=> {
+                console.log(error)
+                if (error.response.status === 400){
+                    const error_msg = error.response.data.error === 'Duplicate' ? "Cannot insert duplicate primary key." : "Foreign key does not exist in table.";
+                    alert(`Integrity error! ${error_msg}`)
+                }
+                else alert('SERVER ERROR!')
+            })
+        },
+        async updateSpecies(arr) {
+            console.log('new arr', arr)
+            SpeciesService.updateSpecies(arr)
+            .then(async (res)=> {
+                await this.fetch()
+                console.log("FETVHEC")
+                this.text = 'Species was updated successfully!'
+                this.snackbar = true
+            })
+        },
+        async deleteSpecies(arr) {
+            console.log('new arr', arr)
+            SpeciesService.deleteSpecies(arr)
+            .then(async (res)=> {
+                await this.fetch()
+                this.text = 'Species was deleted successfully!'
+                this.snackbar = true
+            })
+        },
+
         index(val) {
             return this.headerLabels.indexOf(val)
         },
