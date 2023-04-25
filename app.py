@@ -88,12 +88,38 @@ def create_indices():
 
     return 'Indices created successfully'
 
+
+
+@app.route('/create_procedures_for_queries')
+def create_procedures_for_queries():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    with open('%QUERIES.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+
+    sql_statements = sql_script   
+    cursor.execute(sql_statements)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return 'Querie created successfully'
+
 @app.route('/create_prerequisites')
 def create_prerequisites():
     create_tables()
     create_views()
     create_indices()
-    return "Tables, views, and indices created successfully"
+    return "Tables, views, and indices, and stored procedures created successfully"
 
 @app.route('/get_location_column', methods=['GET'])
 def get_location_column():
@@ -1540,6 +1566,109 @@ def get_populations_filtered():
         conditions.append(f"{column} = '{value}'")
     query += " AND ".join(conditions)
     print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+
+@app.route('/get_species_in_location', methods=['GET'])
+def get_species_in_location():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    data = request.args
+    name = data.get('location_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_species_in_location(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_habitats_of_species', methods=['GET'])
+def get_habitats_of_species():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.args
+    name = data.get('species_common_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_habitats_of_species(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_population_of_species', methods=['GET'])
+def get_population_of_species():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.args
+    name = data.get('species_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_population_of_species(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_researchers_of_species', methods=['GET'])
+def get_researchers_of_species():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    data = request.args
+    name = data.get('species_name', None)
+    
+    cursor = conn.cursor()
+    query = "CALL get_researchers_of_species(%s)"
+    cursor.execute(query, (name,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/sort_habitats_by_degradation', methods=['GET'])
+def sort_habitats_by_degradation():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+
+    cursor = conn.cursor()
+    query = "CALL sort_habitats_by_degradation()"
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()
