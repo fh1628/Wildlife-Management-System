@@ -602,8 +602,8 @@ def del_location():
         database="WILDLIFE_SCHEMA"
     )   
 
-    latitude = request.json["Latitude"]
-    longitude = request.json['Longitude']
+    latitude = request.json["latitude"]
+    longitude = request.json['longitude']
 
     cursor = conn.cursor()
     query = "DELETE FROM LOCATION WHERE  Latitude= %s AND Longitude = %s"
@@ -627,8 +627,8 @@ def del_habitat():
         password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
-    data = request.json
-    name = data.get("habitat_name",None)
+    
+    name = request.json["habitat_name"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Habitat WHERE HabitatName = %s"
@@ -650,8 +650,7 @@ def del_species():
         database="WILDLIFE_SCHEMA"
     )   
 
-    data = request.json
-    scientific_name = data.get('scientific_name',None)
+    scientific_name = request.json["scientific_name"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Species WHERE  ScientificName = %s"
@@ -673,8 +672,7 @@ def del_population():
         database="WILDLIFE_SCHEMA"
     )   
 
-    data = request.json
-    id = data.get('population_id',None)
+    id = request.json["population_id"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Population WHERE  PopulationID = %s"
@@ -697,8 +695,7 @@ def del_researcher():
         database="WILDLIFE_SCHEMA"
     )   
 
-    data = request.json
-    email = data.get('reseracher_email',None)
+    email = request.json["reseracher_email"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Researcher WHERE Email = %s"
@@ -720,9 +717,8 @@ def del_assistant_researcher():
         database="WILDLIFE_SCHEMA"
     )   
 
-    data = request.json
-    assistant_email = data.get('assistant_email',None)
-    researcher_email = data.get('researcher_email',None)
+    assistant_email = request.json["assistant_email"]
+    researcher_email = request.json["researcher_email"]
 
     cursor = conn.cursor()
     query = "DELETE FROM AssistantResearcher WHERE Email = %s AND ResearcherEmail = %s"
@@ -745,8 +741,7 @@ def del_conservation_org():
         database="WILDLIFE_SCHEMA"
     )   
 
-    data = request.json
-    email = data.get('organization_email',None)
+    email = request.json["organization_email"]
 
     cursor = conn.cursor()
     query = "DELETE FROM ConservationOrganization WHERE ContactEmail = %s"
@@ -769,9 +764,8 @@ def del_organisation_protects():
         database="WILDLIFE_SCHEMA"
     )   
 
-    data = request.json
-    email = data.get('organization_email',None)
-    population = data.get('population_id',None)
+    email = request.json["organization_email"]
+    population = request.json["population_id"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Protects WHERE ContactEmail = %s AND PopulationID = %s"
@@ -782,6 +776,390 @@ def del_organisation_protects():
     cursor.close()
     conn.close()
     return 'Organization protects population Deleted'
+
+
+@app.route('/del_habitat_threat', methods=['DELETE'])
+def del_habitat_threat():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    habitat_name = request.json["habitat_name"]
+    threat = request.json["threat"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM HThreats WHERE HabitatName = %s AND Threat = %s"
+    cursor.execute(query, (habitat_name,threat,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Habitat Threat Deleted'
+
+@app.route('/del_species_threat', methods=['DELETE'])
+def del_species_threat():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    species_name = request.json["species_name"]
+    threat = request.json["threat"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM SThreats WHERE ScientificName = %s AND Threat = %s"
+    cursor.execute(query, (species_name,threat,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Species Threat Deleted'
+
+
+@app.route('/del_researcher_project', methods=['DELETE'])
+def del_researcher_project():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+    project = request.json["project"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM RProjects WHERE Email = %s AND Project = %s"
+    cursor.execute(query, (email,project,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher Project Deleted'
+
+
+@app.route('/del_researcher_interest', methods=['DELETE'])
+def del_researcher_interest():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+    interest = request.json["research_interest"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM RInterests WHERE Email = %s AND ResearchInterests = %s"
+    cursor.execute(query, (email,interest,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher Interest Deleted'
+
+@app.route('/del_university_researcher', methods=['DELETE'])
+def del_university_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM UniversityResearcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'University Researcher Deleted'
+
+
+@app.route('/del_company_researcher', methods=['DELETE'])
+def del_company_researcher():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    email = request.json["researcher_email"]
+
+    cursor = conn.cursor()
+    query = "DELETE FROM CompanyResearcher WHERE Email = %s"
+    cursor.execute(query, (email,))
+    
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Company Researcher Deleted'
+
+
+@app.route('/update_habitat', methods=['PUT'])
+def update_habitat():
+    data = request.json
+
+    name = request.json["habitat_name"]
+    degradation_level = data.get('degradation_level', None)
+    conservation_status = data.get('conservation_status', None)
+    habitat_type = data.get('type', None)
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
+
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update Habitat SET HabitatType='%s' ,ConservationStatus='%s' ,DegradationLevel='%s' ,Latitude=%f ,Longitude=%f WHERE HabitatName='%s'" %(habitat_type, conservation_status, degradation_level, latitude, longitude, name)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Habitat updated'
+
+
+
+@app.route('/update_population', methods=['PUT'])
+def update_population():
+    data = request.json
+
+    population_id = request.json["population_id"]
+    size = data.get('size', None)
+    trend = data.get('trend', None)
+    growth_rate = data.get('growth_rate', None)
+    density = data.get('density')
+    habitat_name = data.get('habitat_name')
+    species_name = data.get('species_name')
+
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update Population SET Size = %s, Trend = '%s', GrowthRate = %s, Density = %s, HabitatName ='%s', SpeciesScientificName ='%s' WHERE PopulationID = %s" %(size, trend, growth_rate, density, habitat_name, species_name, population_id)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Population updated'
+
+
+@app.route('/update_species', methods=['PUT'])
+def update_species():
+    data = request.json
+
+    scientific_name = request.json["scientific_name"]
+    common_name = data.get('common_name', None)
+    conservation_status = data.get('conservation_status', None)
+    geographic_distribution = data.get('geographic_distribution', None)
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update Species SET CommonName = '%s', ConservationStatus = '%s', GeographicDistribution = '%s' WHERE ScientificName = '%s'" %(common_name, conservation_status, geographic_distribution, scientific_name)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher updated'
+
+
+@app.route('/update_researcher', methods=['PUT'])
+def update_researcher():
+    data = request.json
+
+    email = request.json["email"]
+    name = data.get('name', None)
+    phone = data.get('phone', None)
+    expertise = data.get('expertise', None)
+    species_name = data.get('species_name',None)
+    population_id = data.get('population_id',None)
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update Researcher SET Name = '%s', Phone = '%s', Expertise = '%s', SpeciesScientificName = '%s', PopulationID = %s WHERE Email = '%s'" %(name, phone, expertise, species_name, population_id, email)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Researcher updated'
+
+
+@app.route('/update_conservation_org', methods=['PUT'])
+def update_conservation_org():
+    data = request.json
+
+    email = request.json["contact_email"]
+    name = data.get('name', None)
+    mission = data.get('mission', None)
+    website = data.get('website', None)
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update ConservationOrganization SET Name = '%s', Mission = '%s', Website = '%s' WHERE ContactEmail = '%s'" %(name, mission, website, email)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Conservation organization updated'
+
+
+@app.route('/update_assistant_researcher', methods=['PUT'])
+def update_assistant_researcher():
+    data = request.json
+
+    email = request.json["assistant_email"]
+    researcher_email = request.json["researcher_email"]
+    name = data.get('name', None)
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update AssistantResearcher SET Name = '%s' WHERE Email = '%s' AND ResearcherEmail = '%s'" %(name, email, researcher_email)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Assistant Researcher updated'
+
+
+@app.route('/update_university_researcher', methods=['PUT'])
+def update_university_researcher():
+    data = request.json
+
+    email = request.json["researcher_email"]
+    name = data.get('name', None)
+    university_name = data.get('university_name', None)
+    tenure = data.get('tenure', None)
+    
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update UniversityResearcher SET Name = '%s', UniversityName = '%s', Tenure = '%s' WHERE Email = '%s'" %(name, university_name, tenure, email)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'University Researcher updated'
+
+
+
+@app.route('/update_company_researcher', methods=['PUT'])
+def update_company_researcher():
+    data = request.json
+
+    email = request.json["researcher_email"]
+    name = data.get('name', None)
+    company_name = data.get('company_name', None)
+    job_title = data.get('job_title', None)
+    
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+
+    query = "Update CompanyResearcher SET Name = '%s', CompanyName = '%s', JobTitle = '%s' WHERE Email = '%s'" %(name, company_name, job_title, email)
+    print(query)
+    cursor.execute(query)
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    return 'Company Researcher updated'
 
 @app.route('/get_locations_filtered', methods=['GET'])
 def get_locations_filtered():
@@ -800,7 +1178,7 @@ def get_locations_filtered():
     query = "SELECT * FROM LOCATION WHERE "
     conditions = []
     for column, value in data.items():
-        conditions.append(f"{column} = {value}")
+        conditions.append(f"{column} = '{value}'")
     query += " AND ".join(conditions)
     print(query)
     cursor.execute(query)
@@ -808,9 +1186,6 @@ def get_locations_filtered():
     cursor.close()
     conn.close()
     return jsonify(rows)
-
-
-
 
 
 @app.route('/get_populations_filtered', methods=['GET'])
