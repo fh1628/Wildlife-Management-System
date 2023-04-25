@@ -66,7 +66,7 @@
             </v-card>
         </div>
         <v-card style="padding: 1rem;">
-            {{ originalData }}
+            <!-- {{ originalData }} -->
             <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" :types="types" @updateRow="(val)=>updateLocation(val)" />
         </v-card>
     </div>
@@ -111,6 +111,9 @@ export default defineComponent({
         }
     },
     methods: {
+        fetch() {
+
+        },
         index(val) {
             return this.headerLabels.indexOf(val)
         },
@@ -137,7 +140,7 @@ export default defineComponent({
                 console.log(error)
                 if (error.response.status === 400){
                     const error_msg = error.response.data.error === 'Duplicate' ? "Cannot insert duplicate primary key." : "Foreign key does not exist in table.";
-                    alert('Integrity error! ' + error_msg)
+                    alert(`Integrity error! ${error_msg}`)
                 }
                 else alert('SERVER ERROR!')
             })
