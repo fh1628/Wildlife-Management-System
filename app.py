@@ -119,6 +119,30 @@ def get_location_column():
     conn.close()
     return jsonify(rows)
 
+@app.route('/get_assistant_researcher_column', methods=['GET'])
+def get_assistant_researcher_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM AssistantResearcher"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
 @app.route('/get_organization_column', methods=['GET'])
 def get_organization_column():
     conn = mysql.connector.connect(
@@ -607,9 +631,9 @@ def add_assistant_researcher():
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
-    name = data.get('name', None)
-    email = data.get('email')
-    researcher_email = data.get('researcher_email')
+    name = data.get('Name', None)
+    email = data.get('Email')
+    researcher_email = data.get('ResearcherEmail')
 
     query = "INSERT INTO AssistantResearcher (Name, Email, ResearcherEmail) VALUES (%s, %s, %s)"
     values = (name, email, researcher_email)
@@ -860,8 +884,8 @@ def del_assistant_researcher():
         database="WILDLIFE_SCHEMA"
     )   
 
-    assistant_email = request.json["assistant_email"]
-    researcher_email = request.json["researcher_email"]
+    assistant_email = request.args["Email"]
+    researcher_email = request.args["ResearcherEmail"]
 
     cursor = conn.cursor()
     query = "DELETE FROM AssistantResearcher WHERE Email = %s AND ResearcherEmail = %s"
@@ -1223,9 +1247,9 @@ def update_conservation_org():
 def update_assistant_researcher():
     data = request.json
 
-    email = request.json["assistant_email"]
-    researcher_email = request.json["researcher_email"]
-    name = data.get('name', None)
+    email = request.json["Email"]
+    researcher_email = request.json["ResearcherEmail"]
+    name = data.get('Name', None)
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -1331,6 +1355,32 @@ def get_researchers_filtered():
     cursor.close()
     conn.close()
     return jsonify(rows)
+
+@app.route('/get_assistant_researchers_filtered', methods=['GET'])
+def get_assistant_researchers_filtered():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.args
+
+    query = "SELECT * FROM AssistantResearcher "
+    if (data):
+        query += "WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
 
 @app.route('/get_locations_filtered', methods=['GET'])
 def get_locations_filtered():

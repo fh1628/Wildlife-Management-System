@@ -6,7 +6,7 @@
         style="color: white"
         align-tabs="center"
       >
-        <v-tab width="15%" v-for="(label,key) in labels" :key="key" :value="label">{{label}}</v-tab>
+        <v-tab v-for="(label,key) in labels" :key="key" :value="label">{{label}}</v-tab>
       </v-tabs>
 
       <v-card-text>
@@ -15,6 +15,7 @@
         <PopulationTable v-if="tab === 'populations'" class="table" @changeTab="(val) => {tab = val}" />
         <SpeciesTable v-if="tab === 'species'" class="table" />
         <ResearcherTable v-if="tab === 'researchers'" class="table" @changeTab="(val) => {tab = val}" />
+        <AssistantResearcher v-if="tab === 'assistant researchers'" class="table" @changeTab="(val)=> {tab = val}" />
         <OrganizationTable v-if="tab === 'organizations'" class="table" />
       </v-card-text>
   </v-card>
@@ -28,13 +29,14 @@ import PopulationTable from './PopulationTable.vue'
 import SpeciesTable from './SpeciesTable.vue'
 import ResearcherTable from './ResearcherTable.vue'
 import OrganizationTable from './OrganizationTable.vue'
+import AssistantResearcher from './AssistantResearcher.vue'
 
 export default defineComponent({
-  components: { LocationTable, HabitatTable, PopulationTable, SpeciesTable, ResearcherTable, OrganizationTable },
+  components: { LocationTable, HabitatTable, PopulationTable, SpeciesTable, ResearcherTable, OrganizationTable, AssistantResearcher },
   data() {
     return  {
       tab: 'locations',
-      labels: ['locations', 'habitats', 'populations', 'species', 'researchers', 'organizations']
+      labels: ['locations', 'habitats', 'populations', 'species', 'researchers', 'assistant researchers' ,  'organizations']
     }
   }
 })

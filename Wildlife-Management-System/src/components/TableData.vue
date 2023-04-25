@@ -21,7 +21,7 @@
       >
       
         <td @click="()=>test(row)" v-for="(column, idx) in row" :key="idx">
-          <v-text-field v-if="selectedRow === key && !isPrimaryKey(idx)" v-model="row[idx]" :type="types[idx]" :label="headerLabels[idx]" variant="underlined" />
+          <v-text-field v-if="selectedRow === key && !isPrimaryKey(headerLabels[idx])" v-model="row[idx]" :type="types[idx]" :label="headerLabels[idx]" variant="underlined" />
           <p v-else>{{ columnName(column) }}</p>
           </td>
         <td>
@@ -116,7 +116,7 @@ export default defineComponent({
   thead {
     .primary-key {
       font-weight: 600;
-      color: red;
+      color: red !important;
     } 
     .foreign-key {
       font-style: italic;
