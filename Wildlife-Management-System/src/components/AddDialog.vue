@@ -9,13 +9,13 @@
           color="green"
           v-bind="props"
         >
-          Add Location
+          Add {{text}}
         </v-btn>
       </template>
 
       <v-card width="700" height="600">
         <v-card-text class="text-h5 text-center">
-          Create Location
+          Create {{ text}}
           <v-sheet width="80%" class="mx-auto my-10">
             <v-form @submit.prevent>
               <v-text-field
@@ -52,6 +52,10 @@ export default defineComponent({
     types: {
       type: Array,
       required: false,
+    },
+    text: {
+      type: String,
+      required: true,
     }
   },
   data() {

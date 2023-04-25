@@ -121,12 +121,156 @@ def create_prerequisites():
     create_indices()
     return "Tables, views, and indices, and stored procedures created successfully"
 
+@app.route('/get_location_column', methods=['GET'])
+def get_location_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM Location"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/get_organization_column', methods=['GET'])
+def get_organization_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM Organization"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+
+@app.route('/get_researcher_column', methods=['GET'])
+def get_researcher_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM Researcher"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/get_population_column', methods=['GET'])
+def get_population_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM Population"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/get_species_column', methods=['GET'])
+def get_species_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM Species"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/get_habitat_column', methods=['GET'])
+def get_habitat_column():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+
+    cursor = conn.cursor()
+    data = request.args
+    query = "SELECT "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column}")
+    query += " , ".join(conditions)
+    query += " FROM HABITAT"
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
 
 @app.route('/add_location', methods=['POST'])
 def add_location():
     data = request.json
 
-    latitude = request.json["Latitude"]
+    latitude = request.json['Latitude']
     longitude = request.json['Longitude']
     name = data.get('LocationName', None)
     location_type = data.get('LocationType', None)
@@ -162,7 +306,6 @@ def add_location():
         return jsonify({'error': str(e)}), 500
 
     conn.commit()
-
     cursor.close()
     conn.close()
     return 'Location added'
@@ -171,14 +314,14 @@ def add_location():
 def update_location():
     data = request.json
 
-    latitude = request.json["latitude"]
-    longitude = request.json['longitude']
-    name = data.get('location_name', None)
-    location_type = data.get('location_type', None)
-    elevation = data.get('location_elevation', None)
-    country = data.get('location_country', None)
-    area = data.get('location_area', None)
-    climate = data.get('location_climate', None)
+    latitude = request.json['Latitude']
+    longitude = request.json['Longitude']
+    name = data.get('LocationName', None)
+    location_type = data.get('LocationType', None)
+    elevation = data.get('Elevation', None)
+    country = data.get('Country', None)
+    area = data.get('Area', None)
+    climate = data.get('Climate', None)
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -232,14 +375,14 @@ def generate_sample_data():
 def add_habitat():
     data = request.json
 
-    name = request.json["habitat_name"]
-    degradation_level = data.get('degradation_level', None)
-    conservation_status = data.get('conservation_status', None)
-    habitat_type = data.get('type', None)
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
-    threats = data.get('threats')
-    all_threats = threats.split(", ")
+    name = request.json["HabitatName"]
+    degradation_level = data.get('DegradationLevel', None)
+    conservation_status = data.get('ConservationStatus', None)
+    habitat_type = data.get('HabitatType', None)
+    latitude = data.get('Latitude')
+    longitude = data.get('Longitude')
+    # threats = data.get('threats')
+    # all_threats = threats.split(", ")
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -267,10 +410,10 @@ def add_habitat():
         # Handle any other exceptions
         return jsonify({'error': str(e)}), 500
     
-    for i in range(len(all_threats)):
-        query = "INSERT INTO HThreats (HabitatName, Threat) VALUES(%s, %s)"
-        values = (name, all_threats[i])
-        cursor.execute(query, values)
+    # for i in range(len(all_threats)):
+    #     query = "INSERT INTO HThreats (HabitatName, Threat) VALUES(%s, %s)"
+    #     values = (name, all_threats[i])
+    #     cursor.execute(query, values)
 
     conn.commit()
 
@@ -283,12 +426,12 @@ def add_habitat():
 def add_species():
     data = request.json
 
-    scientific_name = data.get('scientific_name')
-    common_name = data.get('common_name', None)
-    conservation_status = data.get('conservation_status', None)
-    geographic_distribution = data.get('geographic_distribution', None)
-    threats = data.get('threats')
-    all_threats = threats.split(", ")
+    scientific_name = data.get('ScientificName')
+    common_name = data.get('CommonName', None)
+    conservation_status = data.get('ConservationStatus', None)
+    geographic_distribution = data.get('GeographicDistribution', None)
+    # threats = data.get('threats')
+    # all_threats = threats.split(", ")
     
     conn = mysql.connector.connect(
         host="localhost",
@@ -304,10 +447,10 @@ def add_species():
     cursor.execute(query, values)
 
 
-    for i in range(len(all_threats)):
-        query = "INSERT INTO SThreats (ScientificName, Threat) VALUES (%s, %s)"
-        values = (scientific_name, all_threats[i])
-        cursor.execute(query,values)
+    # for i in range(len(all_threats)):
+    #     query = "INSERT INTO SThreats (ScientificName, Threat) VALUES (%s, %s)"
+    #     values = (scientific_name, all_threats[i])
+    #     cursor.execute(query,values)
 
     conn.commit()
 
@@ -328,13 +471,13 @@ def add_population():
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
-    population_id = data.get('population_id')
-    size = data.get('population_size', None)
-    trend = data.get('population_trend', None)
-    growth_rate = data.get('growth_rate', None)
-    density = data.get('density', None)
-    habitat_name = data.get('habitat_name')
-    specifies_scientific_name = data.get('species_scientific_name')
+    population_id = data.get('PopulationID')
+    size = data.get('Size', None)
+    trend = data.get('Trend', None)
+    growth_rate = data.get('GrowthTate', None)
+    density = data.get('Density', None)
+    habitat_name = data.get('HabitatName')
+    specifies_scientific_name = data.get('SpeciesScientificName')
 
     query = "INSERT INTO Population (PopulationID, Size, Trend, GrowthRate, Density, HabitatName, SpeciesScientificName) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     values = (population_id, size, trend, growth_rate, density, habitat_name, specifies_scientific_name)
@@ -356,12 +499,12 @@ def add_researcher():
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
-    name = data.get('name', None)
-    email = data.get('email')
-    phone = data.get('phone_number', None)
-    expertise = data.get('expertise', None)
-    specifies_scientific_name = data.get('species_scientific_name', None)
-    population_id = data.get('population_id')
+    name = data.get('Name', None)
+    email = data.get('Email')
+    phone = data.get('Phone', None)
+    expertise = data.get('Expertise', None)
+    specifies_scientific_name = data.get('SpeciesScientificName', None)
+    population_id = data.get('PopulationID')
 
     
     query = "INSERT INTO Researcher (Name, Email, Phone, Expertise, SpeciesScientificName, PopulationID) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -369,23 +512,23 @@ def add_researcher():
     cursor.execute(query, values)
     conn.commit()
 
-    researcher_type = data.get('researcher_type')
-    if researcher_type == 'University':
-        university_name = data.get('university_name', None)
-        tenure= data.get('tenure', None)
-        query = "INSERT INTO UniversityResearcher (Name, UniversityName, Tenure, Email) VALUES (%s, %s, %s, %s)"
-        values = (name, university_name, tenure, email)
-        cursor.execute(query, values)
-    elif researcher_type == 'Company':
-        company_name = data.get('company_name', None)
-        job_title = data.get('job_title', None)
-        query = "INSERT INTO CompanyResearcher (Name, CompanyName, JobTitle, Email) VALUES (%s, %s, %s, %s)"
-        values = (name, company_name, job_title, email)
-        cursor.execute(query, values)
+    # researcher_type = data.get('researcher_type')
+    # if researcher_type == 'University':
+    #     university_name = data.get('university_name', None)
+    #     tenure= data.get('tenure', None)
+    #     query = "INSERT INTO UniversityResearcher (Name, UniversityName, Tenure, Email) VALUES (%s, %s, %s, %s)"
+    #     values = (name, university_name, tenure, email)
+    #     cursor.execute(query, values)
+    # elif researcher_type == 'Company':
+    #     company_name = data.get('company_name', None)
+    #     job_title = data.get('job_title', None)
+    #     query = "INSERT INTO CompanyResearcher (Name, CompanyName, JobTitle, Email) VALUES (%s, %s, %s, %s)"
+    #     values = (name, company_name, job_title, email)
+    #     cursor.execute(query, values)
 
     cursor.close()
     conn.close()
-    return researcher_type + ' Researcher added'
+    return ' Researcher added'
 
 
 @app.route('/add_research_project', methods=['POST'])
@@ -442,16 +585,16 @@ def add_research_interest():
     conn.close()
     return 'Research Interests added'
 
-@app.route('/add_conservation_organization', methods=['POST'])
+@app.route('/add_organization', methods=['POST'])
 def add_conservation_organization():
     data = request.json
 
-    email = data.get('contact_email')
-    name = data.get('name', None)
-    mission = data.get('mission', None)
-    website = data.get('website', None)
-    population_ids = data.get('population_ids', None)
-    all_population_ids = population_ids.split(", ")
+    email = data.get('ContactEmail')
+    name = data.get('Name', None)
+    mission = data.get('Mission', None)
+    website = data.get('Website', None)
+    # population_ids = data.get('population_ids', None)
+    # all_population_ids = population_ids.split(", ")
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -468,11 +611,11 @@ def add_conservation_organization():
 
     conn.commit()
 
-    for i in range(len(all_population_ids)):
-        query = "INSERT INTO Protects (ContactEmail, PopulationID) VALUES (%s, %s)"
-        values = (email, all_population_ids[i])
-        cursor.execute(query, values)
-    conn.commit()
+    # for i in range(len(all_population_ids)):
+    #     query = "INSERT INTO Protects (ContactEmail, PopulationID) VALUES (%s, %s)"
+    #     values = (email, all_population_ids[i])
+    #     cursor.execute(query, values)
+    # conn.commit()
 
     cursor.close()
     conn.close()
@@ -600,7 +743,7 @@ def get_assistant_researchers():
     conn.close()
     return jsonify(rows)
 
-@app.route('/get_conservation_organization', methods=['GET'])
+@app.route('/get_organization', methods=['GET'])
 def get_conservation_organization():
     conn = mysql.connector.connect(
         host="localhost",
@@ -627,9 +770,9 @@ def del_location():
         password="youss123",
         database="WILDLIFE_SCHEMA"
     )   
-
-    latitude = request.json["latitude"]
-    longitude = request.json['longitude']
+    data = request.args
+    latitude = data["Latitude"]
+    longitude = data["Longitude"]
 
     cursor = conn.cursor()
     query = "DELETE FROM LOCATION WHERE  Latitude= %s AND Longitude = %s"
@@ -654,7 +797,7 @@ def del_habitat():
         database="WILDLIFE_SCHEMA"
     )   
     
-    name = request.json["habitat_name"]
+    name = request.args["HabitatName"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Habitat WHERE HabitatName = %s"
@@ -676,7 +819,7 @@ def del_species():
         database="WILDLIFE_SCHEMA"
     )   
 
-    scientific_name = request.json["scientific_name"]
+    scientific_name = request.args["ScientificName"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Species WHERE  ScientificName = %s"
@@ -698,7 +841,7 @@ def del_population():
         database="WILDLIFE_SCHEMA"
     )   
 
-    id = request.json["population_id"]
+    id = request.args["PopulationID"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Population WHERE  PopulationID = %s"
@@ -721,7 +864,7 @@ def del_researcher():
         database="WILDLIFE_SCHEMA"
     )   
 
-    email = request.json["reseracher_email"]
+    email = request.args["Email"]
 
     cursor = conn.cursor()
     query = "DELETE FROM Researcher WHERE Email = %s"
@@ -757,7 +900,7 @@ def del_assistant_researcher():
     return 'Assistant Researcher Deleted'
 
 
-@app.route('/del_conservation_org', methods=['DELETE'])
+@app.route('/del_organization', methods=['DELETE'])
 def del_conservation_org():
 
     conn = mysql.connector.connect(
@@ -767,7 +910,7 @@ def del_conservation_org():
         database="WILDLIFE_SCHEMA"
     )   
 
-    email = request.json["organization_email"]
+    email = request.args["ContactEmail"]
 
     cursor = conn.cursor()
     query = "DELETE FROM ConservationOrganization WHERE ContactEmail = %s"
@@ -948,12 +1091,12 @@ def del_company_researcher():
 def update_habitat():
     data = request.json
 
-    name = request.json["habitat_name"]
-    degradation_level = data.get('degradation_level', None)
-    conservation_status = data.get('conservation_status', None)
-    habitat_type = data.get('type', None)
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
+    name = request.json["HabitatName"]
+    degradation_level = data.get('DegradationLevel', None)
+    conservation_status = data.get('ConservationStatus', None)
+    habitat_type = data.get('HabitatType', None)
+    latitude = data.get('Latitude')
+    longitude = data.get('Longitude')
 
 
     conn = mysql.connector.connect(
@@ -965,9 +1108,10 @@ def update_habitat():
 
     cursor = conn.cursor()
 
-    query = "Update Habitat SET HabitatType='%s' ,ConservationStatus='%s' ,DegradationLevel='%s' ,Latitude=%f ,Longitude=%f WHERE HabitatName='%s'" %(habitat_type, conservation_status, degradation_level, latitude, longitude, name)
+    query = "Update Habitat SET HabitatType=%s ,ConservationStatus=%s ,DegradationLevel=%s ,Latitude=%s ,Longitude=%s WHERE HabitatName=%s"
+    values = (habitat_type, conservation_status, degradation_level, latitude, longitude, name)
     print(query)
-    cursor.execute(query)
+    cursor.execute(query, values)
 
     conn.commit()
 
@@ -981,13 +1125,13 @@ def update_habitat():
 def update_population():
     data = request.json
 
-    population_id = request.json["population_id"]
-    size = data.get('size', None)
-    trend = data.get('trend', None)
-    growth_rate = data.get('growth_rate', None)
-    density = data.get('density')
-    habitat_name = data.get('habitat_name')
-    species_name = data.get('species_name')
+    population_id = request.json["PopulationID"]
+    size = data.get('Size', None)
+    trend = data.get('Trend', None)
+    growth_rate = data.get('GrowthRate', None)
+    density = data.get('Density')
+    habitat_name = data.get('HabitatName')
+    species_name = data.get('SpeciesScientificName')
 
 
     conn = mysql.connector.connect(
@@ -999,9 +1143,10 @@ def update_population():
 
     cursor = conn.cursor()
 
-    query = "Update Population SET Size = %s, Trend = '%s', GrowthRate = %s, Density = %s, HabitatName ='%s', SpeciesScientificName ='%s' WHERE PopulationID = %s" %(size, trend, growth_rate, density, habitat_name, species_name, population_id)
+    query = "Update Population SET Size = %s, Trend = %s, GrowthRate = %s, Density = %s, HabitatName =%s, SpeciesScientificName =%s WHERE PopulationID = %s"
+    values = (size, trend, growth_rate, density, habitat_name, species_name, population_id)
     print(query)
-    cursor.execute(query)
+    cursor.execute(query, values)
 
     conn.commit()
 
@@ -1014,10 +1159,10 @@ def update_population():
 def update_species():
     data = request.json
 
-    scientific_name = request.json["scientific_name"]
-    common_name = data.get('common_name', None)
-    conservation_status = data.get('conservation_status', None)
-    geographic_distribution = data.get('geographic_distribution', None)
+    scientific_name = request.json["ScientificName"]
+    common_name = data.get('CommonName', None)
+    conservation_status = data.get('ConservationStatus', None)
+    geographic_distribution = data.get('GeographicDistribution', None)
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -1043,12 +1188,12 @@ def update_species():
 def update_researcher():
     data = request.json
 
-    email = request.json["email"]
-    name = data.get('name', None)
-    phone = data.get('phone', None)
-    expertise = data.get('expertise', None)
-    species_name = data.get('species_name',None)
-    population_id = data.get('population_id',None)
+    email = request.json["Email"]
+    name = data.get('Name', None)
+    phone = data.get('Phone', None)
+    expertise = data.get('Expertise', None)
+    species_name = data.get('SpeciesScientificName',None)
+    population_id = data.get('PopulationID',None)
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -1059,9 +1204,10 @@ def update_researcher():
 
     cursor = conn.cursor()
 
-    query = "Update Researcher SET Name = '%s', Phone = '%s', Expertise = '%s', SpeciesScientificName = '%s', PopulationID = %s WHERE Email = '%s'" %(name, phone, expertise, species_name, population_id, email)
+    query = "Update Researcher SET Name = %s, Phone = %s, Expertise = %s, SpeciesScientificName = %s, PopulationID = %s WHERE Email = %s"
     print(query)
-    cursor.execute(query)
+    values = (name, phone, expertise, species_name, population_id, email)
+    cursor.execute(query, values)
 
     conn.commit()
 
@@ -1070,14 +1216,14 @@ def update_researcher():
     return 'Researcher updated'
 
 
-@app.route('/update_conservation_org', methods=['PUT'])
+@app.route('/update_organization', methods=['PUT'])
 def update_conservation_org():
     data = request.json
 
-    email = request.json["contact_email"]
-    name = data.get('name', None)
-    mission = data.get('mission', None)
-    website = data.get('website', None)
+    email = request.json["ContactEmail"]
+    name = data.get('Name', None)
+    mission = data.get('Mission', None)
+    website = data.get('Website', None)
 
     conn = mysql.connector.connect(
         host="localhost",
@@ -1187,6 +1333,31 @@ def update_company_researcher():
     conn.close()
     return 'Company Researcher updated'
 
+@app.route('/get_researchers_filtered', methods=['GET'])
+def get_researchers_filtered():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.args
+
+    query = "SELECT * FROM Researcher "
+    if (data):
+        query += "WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
 @app.route('/get_locations_filtered', methods=['GET'])
 def get_locations_filtered():
     conn = mysql.connector.connect(
@@ -1201,7 +1372,9 @@ def get_locations_filtered():
     print('data',data)
     print(data.items())
 
-    query = "SELECT * FROM LOCATION WHERE "
+    query = "SELECT * FROM LOCATION "
+    if (data):
+        query += "WHERE "
     conditions = []
     for column, value in data.items():
         conditions.append(f"{column} = '{value}'")
@@ -1213,6 +1386,116 @@ def get_locations_filtered():
     conn.close()
     return jsonify(rows)
 
+@app.route('/get_species_filtered', methods=['GET'])
+def get_species_filtered():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.args
+
+    query = "SELECT * FROM Species "
+    if (data):
+        query += "WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/get_habitats_filtered', methods=['GET'])
+def get_habitats_filtered():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.args
+
+    print('data',data)
+    print(data.items())
+
+    query = "SELECT * FROM HABITAT "
+    if (data):
+        query += "WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    print(query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/sort_location', methods=['GET'])
+def sort_location():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.args
+
+    print('data',data)
+    print(data)
+
+    query = "SELECT * FROM LOCATION "
+    if (data):
+        query += "WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    query += " ORDER BY Elevation"
+    print("QUERY",query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/sort_population', methods=['GET'])
+def sort_population():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="youss123",
+        database="WILDLIFE_SCHEMA"
+    )   
+    cursor = conn.cursor()
+    data = request.args
+
+    print('data',data)
+    print(data)
+
+    query = "SELECT * FROM POPULATION "
+    if (data):
+        query += "WHERE "
+    conditions = []
+    for column, value in data.items():
+        conditions.append(f"{column} = '{value}'")
+    query += " AND ".join(conditions)
+    query += " ORDER BY Size"
+    print("QUERY",query)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(rows)
 
 @app.route('/get_populations_filtered', methods=['GET'])
 def get_populations_filtered():
@@ -1223,9 +1506,11 @@ def get_populations_filtered():
         database="WILDLIFE_SCHEMA"
     )   
     cursor = conn.cursor()
-    data = request.json
+    data = request.args
 
-    query = "SELECT * FROM Population WHERE "
+    query = "SELECT * FROM Population "
+    if (data):
+        query += " WHERE "
     conditions = []
     for column, value in data.items():
         conditions.append(f"{column} = '{value}'")

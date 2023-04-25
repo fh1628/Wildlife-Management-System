@@ -17,7 +17,7 @@
                     </v-btn>
                 </template>
             </v-snackbar>
-            <add-dialog @submit="(data)=>addLocation(data)" :labels="headerLabels" :types="types" class="create-btn" />
+            <add-dialog @submit="(data)=>addLocation(data)" :labels="headerLabels" :types="types" text="Location" class="create-btn" />
             <v-card class="filter-container">
                 <div class="filter-title">
                     <v-icon icon="mdi-filter-variant"></v-icon>
@@ -30,25 +30,22 @@
                         clearable
                         width="80%"
                         label="Type"
-                        :key="filterType"
                         variant="underlined"
-                        :items="getData('Type')"
-                    ></v-autocomplete>
+                        :items="typeItems">
+                    </v-autocomplete>
                     <v-autocomplete
                         v-model="filterCountry"
                         clearable
                         label="Country"
-                        :key="filterCountry"
                         variant="underlined"
-                        :items="getData('Country')"
+                        :items="countryItems"
                     ></v-autocomplete>
                     <v-autocomplete
                         v-model="filterClimate"
                         clearable
                         label="Climate"
-                        :key="filterClimate"
                         variant="underlined"
-                        :items="getData('Climate')"
+                        :items="climateItems"
                     ></v-autocomplete>
                 </div>
             </v-card>
@@ -60,6 +57,7 @@
                 <v-divider />
                 <div class="sort-options">
                     <v-checkbox
+                        v-model="sort"
                         label="Elevation"
                     />
                 </div>
@@ -67,7 +65,7 @@
         </div>
         <v-card style="padding: 1rem;">
             <!-- {{ originalData }} -->
-            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" :types="types" @updateRow="(val)=>updateLocation(val)" />
+            <TableData :header-labels="headerLabels" :data="tableData" :primary-keys="primaryKeys" :types="types" @updateRow="(val)=>updateLocation(val)" @deleteRow="(val)=>deleteLocation(val)" />
         </v-card>
     </div>
 </template>
@@ -86,13 +84,7 @@ export default defineComponent({
     },
     mounted () {
         console.log('mounted')
-        LocationService.getAllLocations()
-        .then((response) => {
-            this.tableData = response.data
-            this.originalData = response.data
-        });
-        // LocationService.getFilteredLocation({Climate: 'Tropical'})
-        // .then((resp)=> this.temp = resp.data)
+        this.fetch()
     },
     data() {
         return {
@@ -105,14 +97,48 @@ export default defineComponent({
             text: '',
             timeout: 2000,
             temp: [],
+            typeItems: [],
             filterType: null,
             filterCountry: null,
-            filterClimate: null
+            filterClimate: null,
+            climateItems: [],
+            countryItems: [],
+            sort: false,
         }
     },
     methods: {
-        fetch() {
+        async fetch() {
+            !this.sort ? LocationService.getFilteredLocation(this.filterObject)
+            .then((response) => {
+                this.tableData = response.data
+            }): LocationService.sort(this.filterObject)
+            .then((response)=> this.tableData = response.data);
+            LocationService.getColumn({'LocationType':''})
+            .then((response) => {
+                const data = response.data
+                // console.log(data)
+                const x = new Set(data.map(d=>d[0]))
+                // console.log([...x])
 
+                this.typeItems = [...new Set(data.map(d=>d[0]))]
+                console.log(this.typeItems)
+
+            })
+            LocationService.getColumn({'Country':''})
+            .then((response) => {
+                const data = response.data
+                this.countryItems = [... new Set(data.map(d=>d[0]))]
+                console.log(this.countryItems)
+
+            })
+            LocationService.getColumn({'Climate':''})
+            .then((response) => {
+                const data = response.data
+                this.climateItems = [... new Set(data.map(d=>d[0]))]
+                console.log(this.climateItems)
+
+            })
+            
         },
         index(val) {
             return this.headerLabels.indexOf(val)
@@ -132,7 +158,7 @@ export default defineComponent({
         async addLocation(dataArray) {
             LocationService.addLocation(dataArray)
             .then(async ()=> {
-                await this.fetchData(); 
+                await this.fetch(); 
                 this.text = 'Location was added successfully!'
                 this.snackbar = true
             })
@@ -148,24 +174,28 @@ export default defineComponent({
         async updateLocation(arr) {
             console.log('new arr', arr)
             LocationService.updateLocation(arr)
-            .then((res)=> {
-                console.log(res.data)
+            .then(async (res)=> {
+                await this.fetch()
                 this.text = 'Location was updated successfully!'
+                this.snackbar = true
+            })
+        },
+        async deleteLocation(arr) {
+            console.log('new arr', arr)
+            LocationService.deleteLocation(arr)
+            .then(async (res)=> {
+                await this.fetch()
+                this.text = 'Location was deleted successfully!'
                 this.snackbar = true
             })
         }
     },
     watch: {
-        filterObject(newFilter) {
-            if (Object.keys(newFilter).length) {
-                LocationService.getFilteredLocation(newFilter)
-                .then((resp) => {
-                    this.text = 'Filter applied!'
-                    this.snackbar = true
-                    this.tableData = resp.data
-                })
-            }
-            else this.tableData = this.originalData
+        sort() {
+            this.fetch()
+        },
+        filterObject() {
+            this.fetch()
         }
     },
     computed: {

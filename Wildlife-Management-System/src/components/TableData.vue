@@ -31,7 +31,7 @@
             }" />
           <v-btn v-else color="blue" variant="tonal" icon="mdi-pencil" size="small" @click="()=> {selectedRow = key}" :disabled="selectedRow !== null" />
         </td>
-        <td><v-btn color="red" variant="tonal" icon="mdi-delete" size="small" :disabled="selectedRow !== null && selectedRow !== key" /></td>
+        <td><v-btn color="red" variant="tonal" icon="mdi-delete" size="small" :disabled="selectedRow !== null && selectedRow !== key" @click="deleteRow([...row])" /></td>
       </tr>
     </tbody>
   </v-table>
@@ -74,6 +74,9 @@ export default defineComponent({
       },
       updateRow(dataArray) {
         this.$emit('updateRow', dataArray)
+      },
+      deleteRow(dataArray) {
+        this.$emit('deleteRow', dataArray)
       },
       isPrimaryKey(value) {
         return this.primaryKeys.includes(value) || this.primaryIndex.includes(value)
